@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete the payment step to finalize your booking with Book Your Travel.">
+    <title>Book Your Travel</title>
+
+    <!-- lien Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- lien CSS -->
+    <link rel="stylesheet" href="/Book-Your-Travel/assets/css/style.css">
+    <link rel="stylesheet" href="/Book-Your-Travel/assets/css/payment-process-2.css">
+    <!-- lien Font Awsome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="icon" type="image/webp" href="/Book-Your-Travel/assets/images/favicon.webp">
+
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+
+                <!-- Logo -->
+                <a href="/Book-Your-Travel/index.html">
+                    <img class="logo" src="../images/favicon.webp" alt="Book Your Travel" width="130" height="102"
+                        fetchpriority="high">
+                </a>
+
+                <!-- Phone Number -->
+                <div class="support-container">
+                    <a class="phone-number" href="tel:+15555555555">
+                        <i class="fa-solid fa-phone phone" aria-hidden="true"></i>
+                        <ul class="numéro">
+                            <li class="support">24/7 Support number</li>
+                            <li class="tel"><strong>1- 555 - 555 - 555</strong></li>
+                        </ul>
+                    </a>
+                </div>
+
+                <!-- Search Barre -->
+                <form class="d-flex search-container" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search entire site here"
+                        aria-label="Search" />
+                    <button class="btn search-button" type="submit" aria-label="Search">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <circle cx="11" cy="11" r="7" stroke="#9a9a9a" stroke-width="2" fill="none" />
+                            <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#9a9a9a" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </form>
+
+                <!-- Connexion -->
+                <div class="compte-container">
+                    <a class="connexion-home" href="">
+                        <i class="fa-solid fa-circle-user compte" aria-hidden="true"></i>
+                        <p class="p-compte">My Account</p>
+                    </a>
+                </div>
+
+                <!-- Langues -->
+                <div class="container-langue">
+                    <label for="language" class="visually-hidden">
+                        Langue
+                    </label>
+                    <select class="langue" name="language" id="language">
+                        <option value="fr" aria-label="Français">FR</option>
+                        <option value="en" aria-label="Anglais">EN</option>
+                    </select>
+                    <!-- Devise -->
+                    <label for="currency" class="visually-hidden">
+                        Devise
+                    </label>
+                    <select class="devise" name="currency" id="currency">
+                        <option value="euro" aria-label="Euro">€</option>
+                        <option value="livre" aria-label="Livre">£</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Menu de naviguation -->
+        <nav aria-label="Main navigation">
+            <ul class="nav justify-content-center menu">
+                <li class="nav-item">
+                    <a class="nav-link" href="/Book-Your-Travel/assets/pages/hotel.html">HOTEL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">FLIGHTS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">FLIGHTS + HOTEL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">SELF CATERING</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">CRUISES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">CAR RENTAL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">LOCATIONS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">HOT DEALS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">PAGES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">CONTACT</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">BLOG</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">PURCHASE</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- Breadcrumb -->
+
+        <nav aria-label="Breadcrumb">
+            <ol class="breadcrumb-ol">
+
+                <li class="container-bread">
+                    <span class="breadcrumb-li">Home</span>
+                    <span aria-hidden="true">|</span>
+
+                    <span class="breadcrumb-li">Hotels</span>
+                    <span aria-hidden="true">|</span>
+
+                    <span class="breadcrumb-li">United Kingdom</span>
+                    <span aria-hidden="true">|</span>
+
+                    <span class="breadcrumb-li">London</span>
+                    <span aria-hidden="true">|</span>
+
+                    <span class="breadcrumb-li">Best ipsum hotel</span>
+                </li>
+
+                <li class="container-bread bread-2">
+                    <span class="breadcrumb-li-end">Back to results</span>
+                    <span aria-hidden="true">|</span>
+                    <span class="breadcrumb-li-end">Change search</span>
+                </li>
+
+            </ol>
+        </nav>
+
+        <hr class="separation-2">
+
+        <!-- ================= MAIN ================= -->
+        <main>
+
+            <section class="form-payment">
+
+                <div class="container-form-payment">
+
+                    <div class="formulaire-payment">
+                        <h1 class="titre-payment"><span class="color-number">02</span> Payment</h1>
+                        <hr class="separation-3">
+
+                        <form class="form-contact-payment-1" action="">
+
+                            <div class="form-field">
+                                <label class="contact" for="card-type">Card type</label>
+                                <input type="text" name="card-type" id="card-type">
+                            </div>
+
+                            <div class="form-field">
+                                <label class="contact" for="card-number">Card number</label>
+                                <input type="text" name="card-number" id="card-number" inputmode="numeric"
+                                    autocomplete="cc-number">
+                            </div>
+
+                            <div class="form-field">
+                                <label class="contact" for="name-card">Name on card</label>
+                                <input type="text" name="name-card" id="name-card" autocomplete="cc-name">
+                            </div>
+
+                            <div class="form-field">
+                                <label class="contact" for="expiration-date">
+                                    Expiration Date
+                                </label>
+                                <input type="date" name="expiration-date" id="expiration-date">
+                            </div>
+
+                            <div class="form-field">
+                                <label class="contact" for="cv2-number">
+                                    CV2 Number
+                                </label>
+                                <input type="text" name="cv2-number" id="cv2-number" inputmode="numeric"
+                                    autocomplete="cc-csc">
+                            </div>
+
+
+
+                            <div class="booking-conditions">
+                                <input type="checkbox" id="conditions" name="conditions" required>
+                                <label class="contact" for="conditions">
+                                    Yes, I have read and I agree to the <span class="condition">booking
+                                        conditions</span>.
+                                </label>
+                            </div>
+
+                            <button class="button-contact" type="submit">
+                                SUBMIT BOOKING
+                            </button>
+
+                        </form>
+                    </div>
+                </div>
+
+                <div class="hotel-informations">
+
+                    <div class="information-box">
+                        <h2>Best ipsum hotel</h2>
+                        <p>
+                            Marylebone, London
+                            <span class="note">
+                                <span class="visually-hidden">3 stars</span>
+                                <span aria-hidden="true">★★★ 👍</span>
+                            </span>
+                            8/10
+                        </p>
+
+                        <hr>
+
+                        <dl class="hotel-details">
+
+                            <div class="detail-item">
+                                <dt>Rooms</dt>
+                                <dd>Standard twin room</dd>
+                            </div>
+
+                            <div class="detail-item">
+                                <dt>Room Description</dt>
+                                <dd>Room only</dd>
+                            </div>
+
+                            <div class="detail-item">
+                                <dt>Check-in Date</dt>
+                                <dd>14-11-12</dd>
+                            </div>
+
+                            <div class="detail-item">
+                                <dt>Check-out Date</dt>
+                                <dd>15-11-12</dd>
+                            </div>
+
+                            <div class="detail-item">
+                                <dt>Room(s)</dt>
+                                <dd>1 night, 1 room, max. 2 people.</dd>
+                            </div>
+
+                        </dl>
+
+                        <hr>
+
+                        <p class="total-price">
+                            Total Price: $ 55,00
+                        </p>
+
+                        <p>VAT (20%) included</p>
+
+                    </div>
+
+                    <!-- Help Contact -->
+
+                    <aside class="information-box">
+                        <h2>Need Help Booking ?</h2>
+
+                        <hr>
+
+                        <p>
+                            Call our customer service team on the number below to speak
+                            to one of our advisors who will help you
+                            with all of your holiday needs.
+                        </p>
+                        <p class="help-phone">
+                            <i class="fa-solid fa-phone phone" aria-hidden="true"></i>
+                            <span class="help-phone-2">1- 555 - 555 - 555</span>
+                        </p>
+                    </aside>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- ================= PIED DE PAGE ================= -->
+
+        <footer class="footer">
+            <div class="footer-container">
+
+                <div class="footer-column">
+                    <h3>Book Your Travel</h3>
+                    <p>1400 Pennsylvania Ave. Washington, DC</p>
+                    <p><strong>P:</strong> 24/7 customer support: 1-555-555-5555</p>
+                    <p><strong>E:</strong> booking@mail.com</p>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Customer support</h3>
+                    <ul>
+                        <li>Faq</li>
+                        <li>How do I make a reservation?</li>
+                        <li>Payment options</li>
+                        <li>Booking tips</li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Follow us</h3>
+                    <div class="socials">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                        <a href="#" aria-label="Youtube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+                        <a href="#" aria-label="RSS"><i class="fas fa-rss" aria-hidden="true"></i></a>
+                        <a href="#" aria-label="Google Plus"><i class="fab fa-google-plus-g" aria-hidden="true"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                        <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p" aria-hidden="true"></i></a>
+                        <a href="#" aria-label="Vimeo"><i class="fab fa-vimeo-v" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Don't miss our exclusive offers</h3>
+                    <div class="signup-container">
+                        <label for="signup-email" class="visually-hidden">Your email address</label>
+                        <input type="email" id="signup-email" class="signup-input" placeholder="Enter your email here">
+                        <button class="signup-button">SIGNUP</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom"></div>
+
+            <!-- ================= PIED DE PAGE BAS ================= -->
+
+            <div class="footer-bas">
+                <div class="footer-left-bas">
+                    Copyright 2016 Book your travel ltd. All rights reserved
+                </div>
+                <div class="footer-right-bas">
+                    <a href="#">About us</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Partners</a>
+                    <a href="#">Customer service</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Terms & Conditions</a>
+                    <a href="#">Privacy statement</a>
+                </div>
+            </div>
+        </footer>
+
+
+</body>
+
+</html>

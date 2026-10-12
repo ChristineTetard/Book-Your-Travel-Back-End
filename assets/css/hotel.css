@@ -1,0 +1,1367 @@
+/* =========================
+   RESPONSIVE GLOBAL
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    width: 100%;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ================= CAROUSEL ================= */
+
+/* Conteneur Principal */
+
+.hotel-content {
+    display: grid;
+    /* Carousel = 70%
+       Informations = 30% */
+    grid-template-columns: 70% 30%;
+    gap: 30px;
+    width: 90%;
+    max-width: 1400px;
+    margin: 50px auto;
+}
+
+/* Carousel */
+
+.hotel-gallery {
+    width: 100%;
+    min-width: 0;
+}
+
+/* Grande image */
+
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.carousel>img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Bouton Previous / Next */
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.prev {
+    left: 20px;
+}
+
+.next {
+    right: 20px;
+}
+
+/* Petites Images */
+
+.thumbnails {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.thumbnail {
+    width: 120px;
+    height: 80px;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    overflow: hidden;
+    background: none;
+    cursor: pointer;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Petite image active */
+
+.thumbnail.active {
+    border: 2px solid #222;
+}
+
+.thumbnail:hover {
+    opacity: 0.8;
+}
+
+/* ================= ENCADREMENT DROITE ================= */
+
+.hotel-informations {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.information-box {
+    padding: 25px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.information-box h1,
+.information-box h2 {
+    margin-bottom: 5px;
+}
+
+.information-box p {
+    line-height: 1.6;
+}
+
+/* Tags */
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tags span {
+    color: white;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: rgb(1, 37, 53);
+    border-radius: 20px;
+    font-size: 18px;
+}
+
+/* On cache la vraie checkbox */
+.tag input {
+    position: absolute;
+    opacity: 0;
+}
+
+/* Petit cercle */
+.tag::before {
+    content: "";
+    width: 14px;
+    height: 14px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    flex-shrink: 0;
+    /* Ne rétrécis pas cet élément lorsque l'espace disponible devient trop petit */
+}
+
+/* Jane Doe Article */
+
+.loved {
+    background-color: rgb(1, 37, 53);
+}
+
+.loved i {
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.loved p {
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    padding-top: 30px;
+    margin-bottom: 0px;
+}
+
+/* Help */
+
+.help-phone {
+    display: flex;
+    margin: 0 auto;
+    text-decoration: none;
+    color: #5f554c;
+    align-items: center;
+}
+
+.help-phone-2 {
+    padding-left: 20px;
+    font-weight: bold;
+    color: rgb(1, 37, 53);
+}
+
+aside i {
+    margin-top: 10px;
+    font-size: 30px;
+    color: #29a2b4;
+}
+
+/* Why Book with us ? */
+
+h3 {
+    font-size: 25px;
+    color: #29a2b4;
+}
+
+/* Popular Hotels */
+
+.etoiles span {
+    color: #635e22;
+    font-size: 20px;
+}
+
+.container-article-hotel p {
+    margin-bottom: 0;
+}
+
+.price-hotel {
+    padding-left: 2px;
+}
+
+.show-all {
+    margin-bottom: 0;
+    align-self: end;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.article-top {
+    margin-top: 10px;
+}
+
+/* ================= NAVBAR GAUCHE ================= */
+
+.hotel-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 50px auto;
+}
+
+.hotel-tabs {
+    display: flex;
+    flex-direction: column;
+    background-color: #e5e1da;
+}
+
+.hotel-tabs span {
+    color: white;
+    font-size: 15px;
+}
+
+.hotel-tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    padding: 14px 8px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    background-color: rgb(1, 37, 53);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
+
+.hotel-tab.active {
+    background-color: #29a2b4;
+    color: white;
+}
+
+.hotel-tab.active span {
+    color: rgb(1, 37, 53);
+}
+
+.hotel-tab.active::after {
+    content: "";
+    position: absolute;
+    right: -20px;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+    border-left: 20px solid #29a2b4;
+}
+
+.icon {
+    color: white;
+}
+
+.tab-icon {
+    width: 22px;
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.hotel-tab:hover {
+    background-color: #29a2b4;
+}
+
+.navbar-main {
+    display: flex;
+    align-items: center;
+    max-height: 0%;
+}
+
+.navbar-main a {
+    display: flex;
+    gap: 30px;
+}
+
+/* Animations CSS */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================= CONTENU NAVBAR ================= */
+
+.info-nav {
+    margin-top: 0;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.titres {
+    color: #29a2b4;
+    font-size: 27px;
+}
+
+.info-availability {
+    display: grid;
+}
+
+/* BOUTON */
+
+.change-date {
+    justify-self: center;
+    width: 255px;
+    height: 40px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 25px;
+    background: rgb(1, 37, 53);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    align-content: center;
+    padding-left: 75px;
+    cursor: pointer;
+    margin-bottom: 30px;
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.change-date:hover {
+    background: #29a2b4;
+    transform: translateY(-1px);
+    box-shadow:
+        0 5px 12px rgba(43, 186, 208, 0.25);
+}
+
+.change-date:active {
+    transform: translateY(0);
+}
+
+/* Room Types */
+
+.rooms-cards {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 28px 0;
+    box-sizing: border-box;
+    gap: 25px;
+}
+
+#room-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.room {
+    display: grid;
+    grid-template-columns: 43% 37% 20%;
+    width: 100%;
+    padding: 0;
+    align-items: stretch;
+    box-sizing: border-box;
+}
+
+.img-room {
+    max-width: 100%;
+    height: 212px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Room Description */
+
+.room-description {
+    padding: 0 25px;
+    box-sizing: border-box;
+}
+
+.room h3 {
+    margin: 0 0 15px 0;
+    color: #635e22;
+    font-size: 25px;
+    line-height: 1.2;
+}
+
+.room p {
+    margin: 0 0 12px 0;
+    color: rgb(1, 37, 53);
+    font-size: 18px;
+    line-height: 1.5;
+    text-align: start;
+}
+
+.more-info {
+    font-weight: bold;
+    margin-top: auto !important;
+    margin-bottom: 0 !important;
+}
+
+/*  Room Details */
+
+.room-info {
+    border-left: 1px solid #ccc;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.room-details {
+    width: 100%;
+}
+
+.room-details p {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    color: rgb(1, 37, 53);
+}
+
+.people {
+    margin-left: 10px;
+    color: rgb(1, 37, 53);
+    font-size: 14px;
+}
+
+/* BOUTON BOOK */
+
+.booking {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 140px;
+    max-width: 100%;
+    height: 45px;
+    padding: 0;
+    background-color: rgb(1, 37, 53);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.booking:hover {
+    background: #29a2b4;
+    transform: translateY(-1px);
+    box-shadow:
+        0 5px 12px rgba(43, 186, 208, 0.25);
+}
+
+/* DESCRIPTION */
+
+.cancel {
+    color: rgb(1, 37, 53);
+    font-weight: bold;
+}
+
+.free {
+    color: rgb(1, 37, 53);
+    font-weight: bold;
+}
+
+.text-navbar {
+    padding-bottom: 30px;
+}
+
+/* FACILITIES */
+
+#facilities .liste-facilities {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px 30px;
+    width: 100%;
+    padding: 0 0 8px 15px;
+}
+
+#facilities .liste-facilities>li {
+    position: relative;
+}
+
+#facilities .liste-facilities>li::marker {
+    color: #29a2b4;
+}
+
+/* REVIEWS */
+
+/* Note / Progress Bar */
+
+.container-score {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.score {
+    max-width: 80%;
+    text-align: center;
+}
+
+.huit {
+    font-weight: 700;
+    color: #635e22;
+    font-size: 70px;
+}
+
+.dix {
+    color: rgb(1, 37, 53);
+    font-size: 45px;
+}
+
+.info-reviews {
+    font-size: 13px;
+}
+
+.progres {
+    margin-top: 20px;
+}
+
+.progress {
+    height: 25px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #29a2b4;
+}
+
+.note-progres {
+    color: rgb(1, 37, 53);
+    font-size: 13px;
+}
+
+.progress-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
+    color: rgb(1, 37, 53);
+    font-weight: bold;
+}
+
+/* Commentaire */
+
+.containerCom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.left {
+    display: flex;
+}
+
+.avatar {
+    max-width: 40%;
+    max-height: 70%;
+}
+
+.text-commentaire {
+    padding-top: 20px;
+}
+
+.left p {
+    margin: 0;
+    margin-left: 10px;
+    font-size: 13px;
+}
+
+.anonymous {
+    padding-top: 20px;
+}
+
+.positif {
+    position: relative;
+    padding-left: 40px;
+}
+
+.positif.pro::before {
+    content: "+";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 50%;
+    background: #43a047;
+    color: #fff;
+}
+
+.positif .negatif {
+    display: block;
+    padding-top: 10px;
+}
+
+.negatif {
+    position: relative;
+    padding-left: 40px;
+}
+
+.negatif.con::before {
+    content: "-";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 50%;
+    background: #E14242;
+    color: #fff;
+}
+
+/* Things to do */
+
+.text-london {
+    color: black;
+    font-size: 16px;
+}
+
+.text-london-2 {
+    font-size: 14px;
+}
+
+.button-read {
+    display: flex;
+    float: right;
+}
+
+.btn-read {
+    margin-top: 0px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    background: rgb(1, 37, 53);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.btn-read:hover {
+    background: #20a9bf;
+    transform: translateY(-1px);
+    box-shadow:
+        0 5px 12px rgba(43, 186, 208, 0.25);
+}
+
+.btn-read:active {
+    transform: translateY(0);
+}
+
+
+
+/* =========================================================
+   RESPONSIVE HOTEL
+   ========================================================= */
+
+/* =========================================================
+   PETIT ÉCRAN DESKTOP
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .room {
+        grid-template-columns: 35% 40% 25%;
+    }
+
+    .room-info {
+        padding: 0 10px;
+    }
+
+    .booking {
+        width: 140px;
+        max-width: 100%;
+        font-size: 13px;
+    }
+}
+
+
+
+/* =========================================================
+   TABLETTE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    /* ================= BREADCRUMB ================= */
+
+    .breadcrumb-ol {
+        width: calc(100% - 40px);
+        margin-left: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .container-bread {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .bread-2 {
+        margin-left: auto;
+    }
+
+    .breadcrumb-li,
+    .breadcrumb-li-end {
+        font-size: 14px;
+    }
+
+    .separation-2 {
+        width: calc(100% - 40px);
+        margin-left: 20px;
+    }
+
+
+    /* ================= CAROUSEL + INFORMATIONS ================= */
+
+    .hotel-content {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        max-width: 100%;
+        margin: 40px auto;
+        gap: 30px;
+    }
+
+    .hotel-gallery {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .hotel-informations {
+        width: 100%;
+        min-width: 0;
+    }
+
+
+    /* ================= CAROUSEL ================= */
+
+    .carousel {
+        width: 100%;
+        height: 400px;
+    }
+
+    .thumbnail {
+        width: 100px;
+        height: 70px;
+    }
+
+
+    /* ================= INFORMATIONS HÔTEL ================= */
+
+    .information-box {
+        padding: 20px;
+    }
+
+    .information-box h1 {
+        font-size: 26px;
+    }
+
+    .information-box h2 {
+        font-size: 21px;
+    }
+
+    .information-box p {
+        font-size: 16px;
+    }
+
+    .tags {
+        gap: 8px;
+    }
+
+    .tag {
+        padding: 8px 12px;
+        font-size: 15px;
+    }
+
+
+    /* ================= NAVIGATION HÔTEL ================= */
+
+    .hotel-layout {
+        display: grid;
+        grid-template-columns: 190px minmax(0, 1fr);
+        width: 95%;
+        max-width: none;
+        margin: 40px auto;
+        gap: 20px;
+    }
+
+    .hotel-tabs {
+        width: 100%;
+    }
+
+    .hotel-tab {
+        width: 100%;
+        padding: 12px 8px;
+        gap: 10px;
+        font-size: 14px;
+    }
+
+    .tab-icon {
+        width: 20px;
+        font-size: 16px;
+    }
+
+
+    /* ================= CONTENU DES TABS ================= */
+
+    .info-nav {
+        width: 100%;
+        min-width: 0;
+        padding: 15px;
+    }
+
+
+    /* ================= CHANGE DATE ================= */
+
+    .change-date {
+        width: 230px;
+    }
+
+
+    /* ================= ROOM TYPES ================= */
+
+    .rooms-cards {
+        width: 100%;
+        padding: 25px 0;
+        gap: 25px;
+    }
+
+    .room {
+        display: grid;
+        grid-template-columns: 38% 40% 22%;
+        width: 100%;
+        padding: 0;
+        align-items: stretch;
+        box-sizing: border-box;
+    }
+
+    .img-room {
+        width: 100%;
+        height: 190px;
+        object-fit: cover;
+    }
+
+    .room-description {
+        width: 100%;
+        padding: 0 15px;
+    }
+
+    .room h3 {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .room p {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .room-info {
+        width: 100%;
+        border-left: 1px solid #ccc;
+        padding: 0 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .room-details {
+        width: 100%;
+    }
+
+    .room-details p {
+        font-size: 15px;
+        margin-bottom: 12px;
+    }
+
+    .people {
+        font-size: 16px;
+        margin-left: 5px;
+    }
+
+    .booking {
+        width: 140px;
+        max-width: 100%;
+        height: 40px;
+        font-size: 13px;
+    }
+
+    .show-all {
+        font-size: 17px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    /* ================= BREADCRUMB ================= */
+
+    .breadcrumb-ol {
+        width: 100%;
+        margin: 0;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .container-bread {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .bread-2 {
+        margin-left: 0;
+    }
+
+    .breadcrumb-li,
+    .breadcrumb-li-end {
+        font-size: 12px;
+        white-space: normal;
+    }
+
+    .breadcrumb-ol p {
+        margin: 0;
+    }
+
+    .separation-2 {
+        width: calc(100% - 30px);
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+
+    /* ================= CAROUSEL + INFORMATIONS ================= */
+
+    .hotel-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: none;
+        margin: 30px 0;
+        padding: 0 15px;
+        gap: 20px;
+    }
+
+
+    /* ================= CAROUSEL ================= */
+
+    .hotel-gallery {
+        width: 100%;
+    }
+
+    .carousel {
+        width: 100%;
+        height: 280px;
+        border-radius: 6px;
+    }
+
+    .carousel-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+    }
+
+    .prev {
+        left: 10px;
+    }
+
+    .next {
+        right: 10px;
+    }
+
+
+    /* ================= MINIATURES ================= */
+
+    .thumbnails {
+        width: 100%;
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+
+    .thumbnail {
+        flex-shrink: 0;
+        width: 65px;
+        min-width: 65px;
+        height: 50px;
+    }
+
+
+    /* ================= INFORMATIONS HÔTEL ================= */
+
+    .hotel-informations {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .information-box {
+        width: 100%;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .information-box h1 {
+        font-size: 24px;
+    }
+
+    .information-box h2 {
+        font-size: 20px;
+    }
+
+    .information-box p {
+        font-size: 16px;
+    }
+
+    .tags {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .tag {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .help-phone {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .help-phone-2 {
+        padding-left: 10px;
+    }
+
+
+    /* ================= NAVIGATION HÔTEL ================= */
+
+    .hotel-layout {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: none;
+        margin: 30px 0;
+        padding: 0 15px;
+        gap: 20px;
+    }
+
+    .hotel-tabs {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hotel-tab {
+        width: 100%;
+        padding: 13px 12px;
+        font-size: 15px;
+    }
+
+    .hotel-tab.active::after {
+        display: none;
+    }
+
+
+    /* ================= CONTENU DES TABS ================= */
+
+    .info-nav {
+        width: 100%;
+        min-width: 0;
+        padding: 15px;
+        border-radius: 12px;
+    }
+
+
+    /* ================= FACILITIES ================= */
+
+    #facilities .liste-facilities {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* ================= CHANGE DATE ================= */
+
+    .change-date {
+        width: 100%;
+        max-width: 255px;
+        padding: 0;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+
+    /* ================= ROOM TYPES ================= */
+
+    .rooms-cards {
+        width: 100%;
+        padding: 20px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .room {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .img-room {
+        width: 100%;
+        max-width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .room-description {
+        width: 100%;
+        padding: 20px 0;
+    }
+
+    .room h3 {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .room p {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .more-info {
+        margin-top: 15px !important;
+    }
+
+    .room-info {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #ccc;
+        padding: 20px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .room-details {
+        width: 100%;
+    }
+
+    .room-details p {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .people {
+        font-size: 18px;
+        margin-left: 0;
+    }
+
+    .booking {
+        width: 140px;
+        height: 42px;
+        font-size: 14px;
+        margin-top: 8px;
+    }
+
+    .show-all {
+        font-size: 16px;
+    }
+
+
+    /* ================= REVIEWS ================= */
+
+    .container-score {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .score {
+        max-width: 100%;
+    }
+
+    .containerCom {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+
+/* =========================================================
+   TRÈS PETIT MOBILE
+   ========================================================= */
+
+@media (max-width: 450px) {
+
+    .hotel-content,
+    .hotel-layout {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .carousel {
+        height: 250px;
+    }
+
+    .information-box {
+        padding: 15px;
+    }
+
+    .info-nav {
+        padding: 12px;
+    }
+
+    .titres {
+        font-size: 23px;
+        color: #167d8d;
+    }
+
+    .huit {
+        font-size: 55px;
+    }
+
+    .dix {
+        font-size: 35px;
+    }
+
+    .booking {
+        width: 100%;
+        max-width: 140px;
+    }
+}

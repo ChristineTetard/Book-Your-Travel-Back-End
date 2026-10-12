@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Discover hotel information, rooms, facilities, reviews and booking options with Book Your Travel.">
+    <title>Book Your Travel</title>
+
+    <!-- lien Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <!-- lien CSS -->
+    <link rel="stylesheet" href="/Book-Your-Travel/assets/css/style.css">
+    <link rel="stylesheet" href="/Book-Your-Travel/assets/css/hotel.css">
+
+    <!-- lien Font Awsome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="icon" type="image/webp" href="/Book-Your-Travel/assets/images/favicon.webp">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+
+                <!-- Logo -->
+                <a href="/Book-Your-Travel/index.html">
+                    <img class="logo" src="../images/favicon.webp" alt="Book Your Travel" width="130" height="102"
+                        fetchpriority="high">
+                </a>
+
+                <!-- Phone Number -->
+                <div class="support-container">
+                    <a class="phone-number" href="tel:+15555555555">
+                        <i class="fa-solid fa-phone phone" aria-hidden="true"></i>
+                        <ul class="numéro">
+                            <li class="support">24/7 Support number</li>
+                            <li class="tel"><strong>1- 555 - 555 - 555</strong></li>
+                        </ul>
+                    </a>
+                </div>
+
+                <!-- Search Barre -->
+                <form class="d-flex search-container" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search entire site here"
+                        aria-label="Search" />
+                    <button class="btn search-button" type="submit" aria-label="Search">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <circle cx="11" cy="11" r="7" stroke="#9a9a9a" stroke-width="2" fill="none" />
+                            <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#9a9a9a" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </form>
+
+                <!-- Connexion -->
+                <div class="compte-container">
+                    <a class="connexion-home" href="">
+                        <i class="fa-solid fa-circle-user compte" aria-hidden="true"></i>
+                        <p class="p-compte">My Account</p>
+                    </a>
+                </div>
+
+                <!-- Langues -->
+                <div class="container-langue">
+                    <label for="language" class="visually-hidden">
+                        Langue
+                    </label>
+                    <select class="langue" name="language" id="language">
+                        <option value="fr" aria-label="Français">FR</option>
+                        <option value="en" aria-label="Anglais">EN</option>
+                    </select>
+                    <!-- Devise -->
+                    <label for="currency" class="visually-hidden">
+                        Devise
+                    </label>
+                    <select class="devise" name="currency" id="currency">
+                        <option value="euro" aria-label="Euro">€</option>
+                        <option value="livre" aria-label="Livre">£</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Menu de naviguation -->
+        <nav aria-label="Main navigation">
+            <ul class="nav justify-content-center menu">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page"
+                        href="/Book-Your-Travel/assets/pages/hotel.html">HOTEL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">FLIGHTS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">FLIGHTS + HOTEL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">SELF CATERING</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">CRUISES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">CAR RENTAL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">LOCATIONS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">HOT DEALS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">PAGES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Book-Your-Travel/assets/pages/contact.html">CONTACT</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">BLOG</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">PURCHASE</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- Breadcrumb -->
+
+        <nav aria-label="Breadcrumb">
+            <ol class="breadcrumb-ol">
+
+                <li class="container-bread">
+                    <span class="breadcrumb-li">
+                        <a class="a-home" href="/Book-Your-Travel/index.html">Home</a>
+                    </span>
+
+                    <span aria-hidden="true">|</span>
+
+                    <span class="breadcrumb-li">Hotels</span>
+
+                    <span aria-hidden="true">|</span>
+
+                    <span class="breadcrumb-li">United Kingdom</span>
+
+                    <span aria-hidden="true">|</span>
+
+                    <span class="breadcrumb-li">London</span>
+
+                    <span aria-hidden="true">|</span>
+
+                    <span class="breadcrumb-li">Search results</span>
+                </li>
+
+                <li class="container-bread bread-2">
+                    <span class="breadcrumb-li-end">Back to results</span>
+
+                    <span aria-hidden="true">|</span>
+
+                    <span class="breadcrumb-li-end">
+                        <a class="a-home" href="/Book-Your-Travel/index.html">
+                            Change search
+                        </a>
+                    </span>
+                </li>
+
+            </ol>
+        </nav>
+
+        <hr class="separation-2">
+
+    </header>
+
+    <!-- ================= MAIN ================= -->
+    <main>
+
+        <section class="hotel-content">
+
+            <!-- GALERIE / CAROUSEL -->
+
+            <!-- Grande Image -->
+            <div class="hotel-gallery">
+                <div class="carousel">
+                    <button class="carousel-btn prev" aria-label="Previous image">
+                        ❮
+                    </button>
+
+                    <img src="/Book-Your-Travel/assets/images/hotel/luxury-poolside-experience-where-guests-bask-opulence-cabanas (1).webp"
+                        alt="Hotel room" id="mainImage" fetchpriority="high">
+
+                    <button class="carousel-btn next" aria-label="Next image">
+                        ❯
+                    </button>
+                </div>
+
+                <!-- Petite Image -->
+                <div class="thumbnails">
+
+                    <button class="thumbnail active" data-index="0">
+                        <img src="/Book-Your-Travel/assets/images/hotel/luxury-poolside-experience-where-guests-bask-opulence-cabanas (1).webp"
+                            alt="Hotel room">
+                    </button>
+
+                    <button class="thumbnail" data-index="1">
+                        <img src="/Book-Your-Travel/assets/images/hotel/hhyunma-hotel-swimming-pool-1065275_1920 (1).webp"
+                            alt="Hotel exterior">
+                    </button>
+
+                    <button class="thumbnail" data-index="2">
+                        <img src="/Book-Your-Travel/assets/images/hotel/engin_akyurt-resort-4369984_1920 (1).webp"
+                            alt="Hotel pool">
+                    </button>
+
+                    <button class="thumbnail" data-index="3">
+                        <img src="/Book-Your-Travel/assets/images/hotel/dreamwalker-palm-966994_1920 (1).webp"
+                            alt="Hotel restaurant">
+                    </button>
+
+                    <button class="thumbnail" data-index="4">
+                        <img src="/Book-Your-Travel/assets/images/hotel/chair-pool (1) (1).webp" alt="Hotel bedroom">
+                    </button>
+                </div>
+
+
+                <div class="hotel-layout">
+
+                    <!-- MENU DE GAUCHE -->
+                    <nav class="hotel-tabs navbar-main" aria-label="Informations sur l'hôtel" role="tablist">
+
+                        <button class="hotel-tab active" type="button" id="tab-availability" data-tab="availability"
+                            role="tab" aria-selected="true" aria-controls="availability">
+                            <span class="tab-icon"><i class="fa-solid fa-calendar icon" aria-hidden="true"></i></span>
+                            <span>Availability</span>
+                        </button>
+
+                        <button class="hotel-tab" type="button" id="tab-description" data-tab="description" role="tab"
+                            aria-selected="false" aria-controls="description">
+                            <span class="tab-icon"><i class="fa-solid fa-circle-info icon"
+                                    aria-hidden="true"></i></span>
+                            <span>Description</span>
+                        </button>
+
+                        <button class="hotel-tab" type="button" id="tab-facilities" data-tab="facilities" role="tab"
+                            aria-selected="false" aria-controls="facilities">
+                            <span class="tab-icon"><i class="fa-solid fa-compass icon" aria-hidden="true"></i></span>
+                            <span>Facilities</span>
+                        </button>
+
+                        <button class="hotel-tab" type="button" id="tab-location" data-tab="location" role="tab"
+                            aria-selected="false" aria-controls="location">
+                            <span class="tab-icon"><i class="fa-solid fa-location-dot icon"
+                                    aria-hidden="true"></i></span>
+                            <span>Location</span>
+                        </button>
+
+                        <button class="hotel-tab" type="button" id="tab-reviews" data-tab="reviews" role="tab"
+                            aria-selected="false" aria-controls="reviews">
+                            <span class="tab-icon"><i class="fa-solid fa-thumbs-up icon" aria-hidden="true"></i></span>
+                            <span>Reviews</span>
+                        </button>
+
+                        <button class="hotel-tab" type="button" id="tab-things-to-do" data-tab="things-to-do" role="tab"
+                            aria-selected="false" aria-controls="things-to-do">
+                            <span class="tab-icon"><i class="fa-solid fa-star icon" aria-hidden="true"></i></span>
+                            <span>Things To Do</span>
+                        </button>
+
+                    </nav>
+
+
+                    <!-- CONTENU À GAUCHE -->
+                    <section class="info-nav">
+
+                        <!-- Availability-->
+
+                        <section class="tab-content active" id="availability" role="tabpanel"
+                            aria-labelledby="tab-availability">
+                            <article class="info-availability">
+                                <h2 class="titres">Availability</h2>
+                                <hr>
+
+                                <p class="text-navbar">
+                                    Available rooms from Thurs 29 Nov 2016 to Fri 30 Nov 2016.
+                                </p>
+
+                                <span class="change-date">
+                                    CHANGE DATES
+                                </span>
+
+                                <h2 class="titres">Room Types</h2>
+                                <hr>
+                                <div class="row">
+                                    <div class="rooms-cards" id="room-card">
+                                        
+                                        <!-- Les chambres sont générées avec JavaScript -->
+
+                                    </div>
+                                </div>
+                            </article>
+                        </section>
+
+
+                        <!-- Description -->
+
+                        <section class="tab-content" id="description" role="tabpanel" aria-labelledby="tab-description">
+                            <article>
+                                <h2 class="titres">General</h2>
+                                <hr>
+
+                                <p class="text-navbar">
+                                    The Best Ipsum hotel features over 1,000 luxuriously appointed, individually styled
+                                    rooms, suites and apartments,
+                                    each containing unique works of art. Accommodation at the hotel includes air
+                                    conditioning in all the rooms,
+                                    private bathroom with heated mirrors, hair dryer, power shower, BT Openzone Wi-Fi,
+                                    coffee and tea making facilities,
+                                    complimentary toiletries, Egyptian linen, flat Screen LCD TV with free view, work
+                                    desk,
+                                    24 hour room service.
+                                </p>
+
+                                <h2 class="titres">Check-in</h2>
+                                <hr>
+
+                                <p class="text-navbar">
+                                    From 15:00 hours
+                                </p>
+
+                                <h2 class="titres">Check-out</h2>
+                                <hr>
+
+                                <p class="text-navbar">
+                                    Until 12:00 hours
+                                </p>
+
+                                <h2 class="titres">Cancellation / Prepayment</h2>
+                                <hr>
+
+                                <p class="text-navbar">
+                                    Cancellation and prepayment policies vary according to room type.
+                                    Please check the <span class="cancel">room conditions</span> when selecting your room.
+                                </p>
+
+                                <h2 class="titres">Children and extra beds</h2>
+                                <hr>
+
+                                <p class="text-navbar">
+                                    <strong class="free">Free!</strong> All children under 8 years stay free of charge
+                                    when using existing beds.
+                                    <strong class="free">Free!</strong> All children under 2 years stay free of charge
+                                    for children's cots/cribs.
+                                    All older children or adults are charged USD 40 per person per night for extra beds.
+                                    The maximum number of extra beds/children's cots permitted in a room is 1.
+                                    Any type of extra bed or child's cot/crib is upon request and needs to be confirmed
+                                    by management.
+                                    Supplements are not calculated automatically in the total costs and will have to be
+                                    paid for separately when checking out.
+                                </p>
+
+                                <h2 class="titres">Pets</h2>
+                                <hr>
+
+                                <p class="text-navbar">
+                                    Pets are allowed. Charges may be applicable.
+                                </p>
+
+                                <h2 class="titres">Accepted credit cards</h2>
+                                <hr>
+
+                                <p class="text-navbar">
+                                    American Express, Visa, Euro/Mastercard,
+                                    Diners Club. The hotel reserves the right to pre-authorise credit cards prior to
+                                    arrival.
+                                </p>
+                            </article>
+                        </section>
+
+
+                        <!-- Facilities -->
+
+                        <section class="tab-content" id="facilities" role="tabpanel" aria-labelledby="tab-facilities">
+                            <article>
+                                <h2 class="titres">Facilities</h2>
+                                <hr>
+
+                                <ul class="liste-facilities">
+                                    <li>Kitchenette</li>
+                                    <li>Beachfront</li>
+                                    <li>Restaurant</li>
+                                    <li>Lounges/bars</li>
+                                    <li>Complimentary breakfast</li>
+                                    <li>Ironing board</li>
+                                    <li>Hotspots</li>
+                                    <li>Room service - full menu</li>
+                                    <li>Laundry/Valet service</li>
+                                    <li>Valet cleaning</li>
+                                    <li>Catering services</li>
+                                    <li>Exhibition/convention floor</li>
+                                    <li>Courtyard</li>
+                                    <li>Airport Shuttle Service</li>
+                                    <li>Car hire</li>
+                                </ul>
+
+                                <h2 class="titres">Activities</h2>
+                                <hr>
+
+                                <p class="text-navbar">
+                                    Tennis court, Sauna, Fitness centre, Massage
+                                </p>
+
+                                <h2 class="titres">Internet</h2>
+                                <hr>
+
+                                <p class="text-navbar">
+                                    <strong class="free">Free!</strong> WiFi is available in all areas and is free of
+                                    charge.
+                                </p>
+
+                                <h2 class="titres">Parking</h2>
+                                <hr>
+
+                                <p class="text-navbar">
+                                    Private parking is possible at a location nearby (reservation is not needed) and
+                                    costs USD 28.80 per day.
+                                </p>
+
+                            </article>
+                        </section>
+
+
+                        <!-- Emplacement -->
+
+                        <section class="tab-content" id="location" role="tabpanel" aria-labelledby="tab-location">
+                            <article>
+                                <h2 class="titres">Emplacement</h2>
+                                <hr>
+
+                                <p class="text-navbar">
+                                    L'hôtel est situé à proximité des principales
+                                    attractions et transports.
+                                </p>
+                            </article>
+                        </section>
+
+
+                        <!-- Critiques -->
+
+                        <section class="tab-content" id="reviews" role="tabpanel" aria-labelledby="tab-reviews">
+                            <article class="critiques">
+
+                                <h2 class="titres">Hotel Score and Score Breakdown</h2>
+                                <hr>
+
+                                <div class="container-score">
+                                    <div class="score">
+                                        <span class="huit">8</span>
+                                        <span class="dix">/10</span>
+
+                                        <p class="info-reviews">Based on 782 reviews</p>
+
+
+                                        <hr>
+
+                                        <p class="text-navbar">Guest reviews are written by our customers <strong
+                                                class="free">after
+                                                their stay</strong> at Hotel Best Ipsum.</p>
+                                    </div>
+
+
+                                    <div class="progres">
+                                        <div class="progress" role="progressbar" aria-label="Clean" aria-valuenow="8"
+                                            aria-valuemin="0" aria-valuemax="10">
+                                            <div class="progress-bar" style="width: 80%"></div>
+                                            <div class="progress-content">Clean <span class="note-progres">8</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress" role="progressbar" aria-label="Comfort" aria-valuenow="6"
+                                            aria-valuemin="0" aria-valuemax="10">
+                                            <div class="progress-bar" style="width: 60%"></div>
+                                            <div class="progress-content">Comfort <span class="note-progres">6</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress" role="progressbar" aria-label="Location" aria-valuenow="8"
+                                            aria-valuemin="0" aria-valuemax="10">
+                                            <div class="progress-bar" style="width: 80%"></div>
+                                            <div class="progress-content">Location <span class="note-progres">8</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress" role="progressbar" aria-label="Staff" aria-valuenow="10"
+                                            aria-valuemin="0" aria-valuemax="10">
+                                            <div class="progress-bar" style="width: 100%"></div>
+                                            <div class="progress-content">Staff <span class="note-progres">10</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress" role="progressbar" aria-label="Services" aria-valuenow="7"
+                                            aria-valuemin="0" aria-valuemax="10">
+                                            <div class="progress-bar" style="width: 70%"></div>
+                                            <div class="progress-content">Services <span class="note-progres">7</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress" role="progressbar" aria-label="Value for money"
+                                            aria-valuenow="9" aria-valuemin="0" aria-valuemax="10">
+                                            <div class="progress-bar" style="width: 90%"></div>
+                                            <div class="progress-content">Value for money <span
+                                                    class="note-progres">9</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </article>
+
+
+                            <!-- Commentaire -->
+
+                            <article class="commentaire">
+                                <h2 class="titres">Guest reviews</h2>
+                                <hr>
+
+                                <div class="container-commentaire" id="commentaire">
+                                    <!-- <figure class="left">  -->
+
+                                    <!-- <img class="avatar" id="imgPerson" src="/assets/images/Avatar-inconnu.jpg" alt="Avatar inconnu">
+
+                                    <address class="address-avatar" id="personReviews">
+                                        <p class="anonymous">Anonymous</p>
+                                        <p>Solo travellerNorway</p>
+                                        <p>22/06/2016</p>   
+                                    </address>
+                                </figure>
+
+                                <div class="text-commentaire">
+                                <div class="positif pro" id="positifReviews">
+                                    <p>It was a warm friendly hotel. Very easy access to shops and underground stations. Staff very welcoming.</p>
+                                </div>
+                                <div class="negatif con">
+                                    <p>Noisy neigbourghs spoilt the rather calm environment.</p>
+                                </div>
+                                </div> -->
+
+                                </div>
+                            </article>
+                        </section>
+
+
+                        <!-- Choses à faire -->
+
+                        <section class="tab-content" id="things-to-do" role="tabpanel"
+                            aria-labelledby="tab-things-to-do">
+                            <article>
+                                <h2 class="titres">London</h2>
+                                <hr>
+
+                                <figure>
+                                    <img src="/Book-Your-Travel/assets/images/london1 (1).webp" alt="photo de BigBen">
+                                </figure>
+                                <p>
+                                    <strong class="text-london">
+                                        London is a diverse and exciting city with some of the best sights and
+                                        attractions in the world.
+                                    </strong>
+                                </p>
+                                <p class="text-london-2">
+                                    See London from above on the London Eye; meet a celebrity at Madame Tussauds;
+                                    examine some of the world's most precious treasures at the British Museum or
+                                    come face-to-face with the dinosaurs at the Natural History Museum.
+                                </p>
+                            </article>
+
+                            <article>
+                                <h2 class="titres">Sports and nature</h2>
+                                <hr>
+
+                                <figure>
+                                    <img src="/Book-Your-Travel/assets/images/london2 (1).webp" alt="photo d'un jardin">
+                                </figure>
+                                <p>
+                                    <strong class="text-london">
+                                        London is one of the greenest capitals in the world, with plenty of green and
+                                        open spaces.
+                                        There are more than 3000 open spaces.
+                                    </strong>
+                                </p>
+                                <p class="text-london-2">
+                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+                                    sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
+                                    volutpat.
+                                    Ut wisi enim ad minim veniam, quis nostrud exerci.
+                                </p>
+                            </article>
+
+                            <article>
+                                <h2 class="titres">Nightlife</h2>
+                                <hr>
+
+                                <figure>
+                                    <img src="/Book-Your-Travel/assets/images/london3 (1).webp" alt="photo d'un concert">
+                                </figure>
+                                <p>
+                                    <strong class="text-london">
+                                        Looking for nightclubs in London?
+                                        Take a look at our guide to London clubs.
+                                        Browse for club ideas, regular club nights and one-off events.
+                                    </strong>
+                                </p>
+                                <p class="text-london-2">
+                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+                                    sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
+                                    volutpat.
+                                    Ut wisi enim ad minim veniam, quis nostrud exerci.
+                                </p>
+                            </article>
+
+                            <article>
+                                <h2 class="titres">Culture and history</h2>
+                                <hr>
+
+                                <figure>
+                                    <img src="/Book-Your-Travel/assets/images/london4 (1).webp"
+                                        alt="photo des gardes du roi">
+                                </figure>
+                                <p>
+                                    <strong class="text-london">
+                                        For a display of British pomp and ceremony,
+                                        watch the Changing the Guard ceremony outside Buckingham Palace.
+                                    </strong>
+                                </p>
+                                <p class="text-london-2">
+                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+                                    sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
+                                    volutpat.
+                                    Ut wisi enim ad minim veniam, quis nostrud exerci.
+                                </p>
+                            </article>
+
+                            <hr>
+
+                            <div class="button-read">
+                                <a href="#" class="btn-read">
+                                    READ MORE
+                                </a>
+                            </div>
+                        </section>
+
+                </div>
+
+            </div>
+
+            </div>
+
+            <!-- ENCADREMENTS À DROITE -->
+
+            <div class="hotel-informations">
+
+                <div class="information-box">
+                    <h1>Best ipsum hotel</h1>
+                    <p>Marylebone, London <span class="note" aria-label="3 étoiles">★★★ 👍</span>8/10</p>
+
+                    <hr>
+
+                    <p>
+                        The Best Ipsum hotel features over 1 000 luxuriously appointed,
+                        individually styled rooms,
+                        suites and apartments,
+                        each containing unique works of art.
+                    </p>
+
+                    <hr>
+
+                    <fieldset class="tags">
+
+                        <legend class="visually-hidden">
+                            Hotel categories
+                        </legend>
+
+                        <label class="tag">
+                            <input type="checkbox" name="theme" value="wellness">
+                            <span>Wellness</span>
+                        </label>
+
+                        <label class="tag">
+                            <input type="checkbox" name="theme" value="last-minute">
+                            <span>Last minute</span>
+                        </label>
+
+                        <label class="tag">
+                            <input type="checkbox" name="theme" value="thailand">
+                            <span>Thailand</span>
+                        </label>
+
+                        <label class="tag">
+                            <input type="checkbox" name="theme" value="spa">
+                            <span>SPA</span>
+                        </label>
+
+                        <label class="tag">
+                            <input type="checkbox" name="theme" value="romantic">
+                            <span>Romantic</span>
+                        </label>
+                    </fieldset>
+
+                </div>
+
+                <!-- Article Jane Doe -->
+
+                <article class="information-box loved">
+                    <i>"Loved the staff and the location was just amazing... Perfect !"</i>
+                    <br>
+                    <p>- Jane Doe, Solo Traveller</p>
+                </article>
+
+                <!-- Help Contact -->
+
+                <aside class="information-box">
+                    <h2>Need Help Booking ?</h2>
+
+                    <hr>
+
+                    <p>
+                        Call our customer service team on the number below to speak
+                        to one of our advisors who will help you
+                        with all of your holiday needs.
+                    </p>
+                    <p class="help-phone">
+                        <i class="fa-solid fa-phone phone" aria-hidden="true"></i>
+                        <span class="help-phone-2">1- 555 - 555 - 555</span>
+                    </p>
+                </aside>
+
+                <!-- Why Book with us ? -->
+
+                <section class="information-box">
+                    <h2>Why Book with us ?</h2>
+
+                    <hr>
+
+                    <article class="why-book">
+                        <h3>Low rates</h3>
+                        <p>
+                            Get the best rates, or get a refund.
+                            No Booking fees. Save money !
+                        </p>
+                    </article>
+
+                    <article class="why-book">
+                        <h3>Largest Selection</h3>
+                        <p>
+                            140 000+ hotels worldwide,
+                            130+ airlines Over,
+                            3 million guest reviews
+                        </p>
+                    </article>
+
+                    <article class="why-book">
+                        <h3>We're Always Here</h3>
+                        <p>
+                            Call or email us, anytime. Get 24-hour support before,
+                            during, and after your trip
+                        </p>
+                    </article>
+                </section>
+
+                <!-- Popular Hotel -->
+
+                <section class="information-box">
+                    <h2>Popular hotels in the area</h2>
+
+                    <hr>
+
+                    <article class="container-article-hotel">
+                        <h3>Plaza Resort Hotel & SPA</h3>
+                        <div class="etoiles" role="img" aria-label="4 étoiles">
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                        </div>
+                        <p class="price-hotel">From <span class="price">$ 100</span> / per night</p>
+                        <p>👍 8/10</p>
+                    </article>
+
+                    <hr>
+
+                    <article class="container-article-hotel">
+                        <h3>Lorem Ipsum Inn</h3>
+                        <div class="etoiles" role="img" aria-label="5 étoiles">
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                        </div>
+                        <p class="price-hotel">From <span class="price">$ 110</span> / per night</p>
+                        <p>👍 7/10</p>
+                    </article>
+
+                    <hr>
+
+                    <article class="container-article-hotel">
+                        <h3>Best Eastern London</h3>
+                        <div class="etoiles" role="img" aria-label="5 étoiles">
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                        </div>
+                        <p class="price-hotel">From <span class="price">$ 125</span> / per night</p>
+                        <p>👍 8/10</p>
+                    </article>
+
+                    <hr>
+
+                    <article class="container-article-hotel">
+                        <h3>Plaza Resort Hotel & SPA</h3>
+                        <div class="etoiles" role="img" aria-label="4 étoiles">
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                        </div>
+                        <p class="price-hotel">From <span class="price">$ 100</span> / per night</p>
+                        <p>👍 8/10</p>
+                    </article>
+
+                    <hr>
+
+                    <p class="show-all">Show all</p>
+                </section>
+
+                <section class="information-box">
+                    <h2>Deal of the day</h2>
+
+                    <hr>
+
+                    <img src="/Book-Your-Travel/assets/images/hotel/engin_akyurt-resort-4369984_1920 (1).webp" alt=""
+                        width="800" height="534" loading="lazy">
+
+                    <article class="container-article-hotel article-top">
+                        <h3>Plaza Resort Hotel & SPA</h3>
+                        <div class="etoiles" role="img" aria-label="4 étoiles">
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                            <span aria-hidden="true">★</span>
+                        </div>
+                        <p class="price-hotel">From <span class="price">$ 100</span> / per night</p>
+                        <p>👍 8/10</p>
+                    </article>
+                </section>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= PIED DE PAGE ================= -->
+
+    <footer class="footer">
+        <div class="footer-container">
+
+            <div class="footer-column">
+                <h3>Book Your Travel</h3>
+                <p>1400 Pennsylvania Ave. Washington, DC</p>
+                <p><strong>P:</strong> 24/7 customer support: 1-555-555-5555</p>
+                <p><strong>E:</strong> booking@mail.com</p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Customer support</h3>
+                <ul>
+                    <li>Faq</li>
+                    <li>How do I make a reservation?</li>
+                    <li>Payment options</li>
+                    <li>Booking tips</li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Follow us</h3>
+                <div class="socials">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Youtube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="RSS"><i class="fas fa-rss" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Google Plus"><i class="fab fa-google-plus-g" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Vimeo"><i class="fab fa-vimeo-v" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h3>Don't miss our exclusive offers</h3>
+                <div class="signup-container">
+                    <label for="signup-email" class="visually-hidden">Your email address</label>
+                    <input type="email" id="signup-email" class="signup-input" placeholder="Enter your email here">
+                    <button class="signup-button">SIGNUP</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom"></div>
+
+        <!-- ================= PIED DE PAGE BAS ================= -->
+
+        <div class="footer-bas">
+            <div class="footer-left-bas">
+                Copyright 2016 Book your travel ltd. All rights reserved
+            </div>
+            <div class="footer-right-bas">
+                <a href="#">About us</a>
+                <a href="#">Contact</a>
+                <a href="#">Partners</a>
+                <a href="#">Customer service</a>
+                <a href="#">FAQ</a>
+                <a href="#">Careers</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy statement</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/hotel.js" defer></script>
+
+</body>
+
+</html>

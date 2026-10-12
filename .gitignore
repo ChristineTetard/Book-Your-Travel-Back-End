@@ -1,0 +1,11 @@
+# Ancien historique Git du Bloc 1
+.git-bloc1-sauvegarde/
+
+# Dépendances Node.js
+node_modules/
+
+# Variables confidentielles
+.env
+
+# Fichiers temporaires
+*.log

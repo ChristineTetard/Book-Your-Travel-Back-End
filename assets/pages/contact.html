@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Contact Book Your Travel for information and assistance with your travel bookings.">
+    <title>Book Your Travel</title>
+
+    <!-- lien Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <!-- lien CSS -->
+    <link rel="stylesheet" href="/Book-Your-Travel/assets/css/style.css">
+    <link rel="stylesheet" href="/Book-Your-Travel/assets/css/contact.css">
+
+    <!-- lien Font Awsome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="icon" type="image/webp" href="/Book-Your-Travel/assets/images/favicon.webp">
+
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+
+                <!-- Logo -->
+                <a href="/Book-Your-Travel/index.html">
+                    <img class="logo" src="../images/favicon.webp" alt="Book Your Travel" width="130" height="102"
+                        fetchpriority="high">
+                </a>
+
+
+                <!-- Phone Number -->
+                <div class="support-container">
+                    <a class="phone-number" href="tel:+15555555555">
+                        <i class="fa-solid fa-phone phone" aria-hidden="true"></i>
+                        <ul class="numéro">
+                            <li class="support">24/7 Support number</li>
+                            <li class="tel"><strong>1- 555 - 555 - 555</strong></li>
+                        </ul>
+                    </a>
+                </div>
+
+                <!-- Search Barre -->
+                <form class="d-flex search-container" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search entire site here"
+                        aria-label="Search" />
+                    <button class="btn search-button" type="submit" aria-label="Search">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <circle cx="11" cy="11" r="7" stroke="#9a9a9a" stroke-width="2" fill="none" />
+                            <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#9a9a9a" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </form>
+
+                <!-- Connexion -->
+                <div class="compte-container">
+                    <a class="connexion-home" href="">
+                        <i class="fa-solid fa-circle-user compte" aria-hidden="true"></i>
+                        <p class="p-compte">My Account</p>
+                    </a>
+                </div>
+
+                <!-- Langues -->
+                <div class="container-langue">
+                    <label for="language" class="visually-hidden">
+                        Langue
+                    </label>
+                    <select class="langue" name="language" id="language">
+                        <option value="fr" aria-label="Français">FR</option>
+                        <option value="en" aria-label="Anglais">EN</option>
+                    </select>
+                    <!-- Devise -->
+                    <label for="currency" class="visually-hidden">
+                        Devise
+                    </label>
+                    <select class="devise" name="currency" id="currency">
+                        <option value="euro" aria-label="Euro">€</option>
+                        <option value="livre" aria-label="Livre">£</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Menu de naviguation -->
+        <nav aria-label="Main navigation">
+            <ul class="nav justify-content-center menu">
+                <li class="nav-item">
+                    <a class="nav-link" href="/Book-Your-Travel/assets/pages/hotel.html">HOTEL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">FLIGHTS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">FLIGHTS + HOTEL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">SELF CATERING</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">CRUISES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">CAR RENTAL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">LOCATIONS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">HOT DEALS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">PAGES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  active" href="#" aria-current="page">CONTACT</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">BLOG</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">PURCHASE</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Breadcrumb -->
+
+        <nav aria-label="Breadcrumb">
+            <ol class="breadcrumb-ol">
+
+                <li class="container-bread">
+                    <span class="breadcrumb-li">
+                        <a class="a-home" href="/Book-Your-Travel/index.html">Home</a>
+                    </span>
+
+                    <span aria-hidden="true">|</span>
+
+                    <span class="breadcrumb-li">Contact</span>
+                </li>
+
+            </ol>
+        </nav>
+
+
+        <hr class="separation-2">
+    </header>
+
+    <!-- ================= MAIN ================= -->
+    <main>
+
+    <!-- Titre + Maps -->
+    
+        <section class="container-contact">
+            <div class="contact">
+                <h1 class="titreH1">Contact us</h1>
+
+                <div class="container-maps">
+                    <iframe class="maps"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3105.2304654059035!2d-77.03495072338744!3d38.895844771724484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89b7b797ef60a829%3A0x308f6aa1bf4c84c5!2s1400%20Pennsylvania%20Ave%20NW%2C%20Washington%2C%20DC%2020004%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sfr!4v1787851796976!5m2!1sfr!2sfr"
+                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        title="Map showing the location of Book Your Travel"></iframe>
+                </div>
+            </div>
+
+
+            <aside>
+                <!-- Formulaire contact -->
+                <div class="container-form-contact">
+                    <h2>Send us a message</h2>
+                    <hr>
+
+                    <form class="form-contact" action="">
+
+                        <label class="contact" for="name-contact">Your name</label>
+                        <input type="text" name="name-contact" id="name-contact">
+
+                        <label class="contact" for="email-contact">Your e-mail</label>
+                        <input type="email" name="email-contact" id="email-contact">
+
+                        <label class="contact" for="message-contact">Your message</label>
+                        <textarea name="message-contact" id="message-contact"></textarea>
+
+                        <button class="button-contact" type="submit">
+                            SEND
+                        </button>
+
+                    </form>
+                </div>
+
+                <!-- Contact directly -->
+                <div class="container-contact-tel">
+                    <h2>Or contact us directly</h2>
+                    <hr>
+
+                    <p class="help-phone">
+                        <i class="fa-solid fa-phone phone" aria-hidden="true"></i>
+                        <span class="help-phone-2">1- 555 - 555 - 555</span>
+                    </p>
+                    <p class="help-mail">
+                        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                        <span class="help-mail-2">booking@mail.com</span>
+                    </p>
+
+                </div>
+            </aside>
+
+        </section>
+    </main>
+
+
+    <!-- ================= PIED DE PAGE ================= -->
+
+    <footer class="footer">
+        <div class="footer-container">
+
+            <div class="footer-column">
+                <h3>Book Your Travel</h3>
+                <p>1400 Pennsylvania Ave. Washington, DC</p>
+                <p><strong>P:</strong> 24/7 customer support: 1-555-555-5555</p>
+                <p><strong>E:</strong> booking@mail.com</p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Customer support</h3>
+                <ul>
+                    <li>Faq</li>
+                    <li>How do I make a reservation?</li>
+                    <li>Payment options</li>
+                    <li>Booking tips</li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Follow us</h3>
+                <div class="socials">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Youtube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="RSS"><i class="fas fa-rss" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Google Plus"><i class="fab fa-google-plus-g" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Vimeo"><i class="fab fa-vimeo-v" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h3>Don't miss our exclusive offers</h3>
+                <div class="signup-container">
+                    <label for="signup-email" class="visually-hidden">Your email address</label>
+                    <input type="email" id="signup-email" class="signup-input" placeholder="Enter your email here">
+                    <button class="signup-button">SIGNUP</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom"></div>
+
+        <!-- ================= PIED DE PAGE BAS ================= -->
+
+        <div class="footer-bas">
+            <div class="footer-left-bas">
+                Copyright 2016 Book your travel ltd. All rights reserved
+            </div>
+            <div class="footer-right-bas">
+                <a href="#">About us</a>
+                <a href="#">Contact</a>
+                <a href="#">Partners</a>
+                <a href="#">Customer service</a>
+                <a href="#">FAQ</a>
+                <a href="#">Careers</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy statement</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

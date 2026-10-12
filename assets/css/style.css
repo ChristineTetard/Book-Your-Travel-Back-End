@@ -1,0 +1,630 @@
+/* ================= RESET & BASE ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: rgb(1, 37, 53);
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+body {
+  background-color: whitesmoke;
+}
+
+/* ================= MAIN ================= */
+main {
+  margin: 0 auto;
+}
+
+.separation {
+  width: 95%;
+  margin-left: 30px;
+  margin-top: 50px;
+}
+
+/* ================= LOGO ================= */
+.logo {
+  margin-left: 20px;
+  color: #2fa69a;
+  font-weight: 500;
+  font-size: large;
+  border-radius: 10px;
+  box-shadow: #a6a62f 2px 2px;
+  margin-bottom: 10px;
+}
+
+/* ================= PHONE NUMBER ================= */
+.phone {
+  margin-top: 10px;
+  font-size: 30px;
+  color: #29a2b4;
+  margin-bottom: 10px;
+}
+
+.phone-number {
+  display: flex;
+  margin: 0 auto;
+  text-decoration: none;
+  color: #5f554c;
+  padding-top: 5px;
+}
+
+.numéro {
+  list-style: none;
+}
+
+/* ================= BARRE DE RECHERCHE ================= */
+.search-container {
+  position: relative;
+  width: 350px;
+  max-width: 90%;
+  margin-bottom: 10px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 12px 50px 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-container input:hover {
+  border-color: #29a2b4;
+}
+
+.search-container input:focus {
+  border-color: #29a2b4;
+  box-shadow: 0 0 0 3px rgba(41, 162, 180, 0.15);
+}
+
+.search-container input::placeholder {
+  color: #9a9a9a;
+}
+
+.search-button {
+  position: absolute;
+  right: 20px;
+  top: 55%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 5px;
+  margin-top: -5px;
+}
+
+/* ================= COMPTE ================= */
+.connexion-home {
+  display: flex;
+  align-items: center;
+  margin-right: 30px;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.compte {
+  font-size: 30px;
+  color: #2bbad0;
+  margin-right: 10px;
+}
+
+.p-compte {
+  margin: 0;
+  padding-top: 5px;
+  white-space: nowrap;
+  color: rgb(1, 37, 53);
+}
+
+/* ================= LANGUES ================= */
+.langue {
+  border-radius: 10px;
+  color: rgb(1, 37, 53);
+}
+
+.container-langue {
+  padding-right: 20px;
+}
+
+/* ================= DEVISE ================= */
+.devise {
+  border-radius: 10px;
+  color: rgb(1, 37, 53);
+}
+
+/* ================= MENU DE NAVIGATION ================= */
+.menu {
+  background-color: rgb(1, 37, 53);
+  padding: 5px;
+  cursor: pointer;
+}
+
+.menu a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+.menu a:hover {
+  color: #bcbc2d;
+}
+
+.menu a:focus {
+  color: #bcbc2d;
+}
+
+/* Lien actif */
+.menu a.active {
+  color: #bcbc2d !important;
+}
+
+/* ================= BREADCRUMB ================= */
+
+.breadcrumb-ol {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 95%;
+  margin-left: 30px;
+  padding-top: 20px;
+  list-style: none;
+}
+
+.container-bread {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.breadcrumb-li,
+.breadcrumb-li-end {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.bread-2 {
+  margin-left: auto;
+}
+
+.breadcrumb-ol span {
+  color: rgb(1, 37, 53);
+}
+
+.a-home {
+  color: inherit;
+  text-decoration: none;
+}
+
+.separation-2 {
+  width: 95%;
+  margin-left: 30px;
+  padding-bottom: 20px;
+}
+
+
+/* ================= FOOTER ================= */
+
+/* BODY */
+
+.footer {
+  background: rgb(1, 37, 53);
+  padding: 50px 60px 0;
+  color: white;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 40px;
+  width: 100%;
+}
+
+.footer-column {
+  min-width: 0;
+}
+
+/* TITRE */
+
+.footer h3 {
+  color: white;
+  margin-bottom: 30px;
+}
+
+/* PARAGRAPHE */
+
+.footer p {
+  margin-bottom: 5px;
+  color: white;
+}
+
+p strong {
+  color: #bcbc2d;
+}
+
+/* LISTE */
+
+.footer ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer ul li {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.footer ul li::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  background: #bcbc2d;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+/* ICONES SOCIALES */
+.socials {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.socials a {
+  width: 45px;
+  height: 45px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+}
+
+/* BARRE EMAIL */
+.signup-container {
+  display: flex;
+  width: 100%;
+  max-width: 350px;
+  background: white;
+  border: 1px solid white;
+  border-radius: 40px;
+  overflow: hidden;
+}
+
+.signup-input {
+  flex: 1 1 auto;
+  width: 0;
+  min-width: 0;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  outline: none;
+  background: transparent;
+}
+
+.signup-button {
+  flex-shrink: 0;
+  background: #bcbc2d;
+  color: rgb(1, 37, 53);
+  border: none;
+  padding: 0 20px;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 1px;
+  border-radius: 0 40px 40px 0;
+}
+
+.signup-button:hover {
+  background: #20a9bf;
+  transform: translateY(-1px);
+  box-shadow:
+    0 5px 12px rgb(1, 37, 53);
+  color: white;
+}
+
+/* LIGNE BAS */
+.footer-bottom {
+  margin-top: 40px;
+  border-top: 1px solid white;
+}
+
+
+/* ================= FOOTER BAS ================= */
+
+.footer-bas {
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  font-size: 18px;
+  flex-wrap: wrap;
+}
+
+.footer-right-bas {
+  padding-top: 30px;
+  text-align: center;
+}
+
+.footer-left-bas {
+  color: white;
+}
+
+.footer-right-bas a {
+  text-decoration: none;
+  color: white;
+  margin: 0 10px;
+}
+
+.footer-right-bas a:hover {
+  text-decoration: underline;
+}
+
+/* SEPARATEURS | */
+.footer-right-bas a:not(:last-child)::after {
+  content: "|";
+  margin-left: 10px;
+  color: white;
+}
+
+
+
+/* =========================================================
+   RESPONSIVE GLOBAL
+   ========================================================= */
+
+
+/* =========================================================
+   TABLETTE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  /* ================= HEADER ================= */
+
+  .logo {
+    margin-left: 10px;
+  }
+
+  .search-container {
+    width: 280px;
+    max-width: 100%;
+  }
+
+  .connexion-home {
+    margin-right: 15px;
+  }
+
+  .container-langue {
+    padding-right: 10px;
+  }
+
+
+  /* ================= FOOTER ================= */
+
+  .footer {
+    padding: 40px 30px 0;
+  }
+
+  .footer-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px;
+  }
+
+  .footer-column {
+    min-width: 0;
+  }
+
+  .signup-container {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  .footer-bas {
+    padding: 15px 20px;
+    gap: 20px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  /* ================= GLOBAL ================= */
+
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .separation {
+    width: calc(100% - 30px);
+    margin-left: 15px;
+    margin-top: 30px;
+  }
+
+
+  /* ================= LOGO ================= */
+
+  .logo {
+    margin-left: 0;
+    font-size: 16px;
+  }
+
+
+  /* ================= TÉLÉPHONE ================= */
+
+  .phone {
+    font-size: 24px;
+  }
+
+  .phone-number {
+    margin: 0;
+  }
+
+
+  /* ================= RECHERCHE ================= */
+
+  .search-container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .search-container input {
+    width: 100%;
+    font-size: 14px;
+    padding: 12px 50px 12px 15px;
+  }
+
+
+  /* ================= COMPTE ================= */
+
+  .connexion-home {
+    margin-right: 0;
+    gap: 5px;
+  }
+
+  .compte {
+    font-size: 25px;
+    margin-right: 5px;
+  }
+
+  .p-compte {
+    font-size: 14px;
+  }
+
+
+  /* ================= LANGUE / DEVISE ================= */
+
+  .container-langue {
+    padding-right: 0;
+  }
+
+
+  /* ================= FOOTER ================= */
+
+  .footer {
+    padding: 35px 20px 0;
+  }
+
+  .footer-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .footer-column {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .footer h3 {
+    margin-bottom: 15px;
+  }
+
+
+  /* ================= NEWSLETTER ================= */
+
+  .signup-container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .signup-input {
+    min-width: 0;
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+
+  .signup-button {
+    padding: 0 15px;
+    font-size: 12px;
+  }
+
+
+  /* ================= RÉSEAUX SOCIAUX ================= */
+
+  .socials {
+    gap: 10px;
+  }
+
+  .socials a {
+    width: 40px;
+    height: 40px;
+  }
+
+
+  /* ================= BAS DU FOOTER ================= */
+
+  .footer-bas {
+    padding: 15px 0;
+    flex-direction: column;
+    gap: 15px;
+    font-size: 14px;
+  }
+
+  .footer-left-bas,
+  .footer-right-bas {
+    width: 100%;
+    text-align: center;
+  }
+
+  .footer-right-bas {
+    padding-top: 10px;
+  }
+
+  .footer-right-bas a {
+    display: inline-block;
+    margin: 5px;
+  }
+}
+
+
+/* =========================================================
+   TRÈS PETIT MOBILE
+   ========================================================= */
+
+@media (max-width: 450px) {
+
+  .footer {
+    padding: 30px 15px 0;
+  }
+
+  .signup-container {
+    flex-direction: column;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+
+  .signup-input {
+    width: 100%;
+    padding: 12px 15px;
+  }
+
+  .signup-button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 0;
+  }
+
+  .footer-right-bas a {
+    margin: 4px;
+    font-size: 13px;
+  }
+}
