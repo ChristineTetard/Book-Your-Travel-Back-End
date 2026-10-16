@@ -84,10 +84,10 @@ const server = http.createServer((req, res) => {
         });
 
 
-    // ======================================================
-    // GET - RÉCUPÉRER UN SEUL HÔTEL
-    // Exemple : /api/hotels/1
-    // ======================================================
+        // ======================================================
+        // GET - RÉCUPÉRER UN SEUL HÔTEL
+        // Exemple : /api/hotels/1
+        // ======================================================
 
     } else if (req.method === "GET" && req.url.startsWith("/api/hotels/")) {
 
@@ -118,7 +118,7 @@ const server = http.createServer((req, res) => {
                         error: "Erreur du serveur"
                     }));
 
-                // Si aucun hôtel n'a été trouvé
+                    // Si aucun hôtel n'a été trouvé
                 } else if (results.length === 0) {
 
                     // Code HTTP 404 = ressource introuvable
@@ -138,10 +138,10 @@ const server = http.createServer((req, res) => {
         );
 
 
-    // ======================================================
-    // GET - RÉCUPÉRER TOUTES LES CHAMBRES
-    // Adresse : /api/rooms
-    // ======================================================
+        // ======================================================
+        // GET - RÉCUPÉRER TOUTES LES CHAMBRES
+        // Adresse : /api/rooms
+        // ======================================================
 
     } else if (req.method === "GET" && req.url === "/api/rooms") {
 
@@ -167,10 +167,10 @@ const server = http.createServer((req, res) => {
         });
 
 
-    // ======================================================
-    // GET - RÉCUPÉRER UNE SEULE CHAMBRE
-    // Exemple : /api/rooms/1
-    // ======================================================
+        // ======================================================
+        // GET - RÉCUPÉRER UNE SEULE CHAMBRE
+        // Exemple : /api/rooms/1
+        // ======================================================
 
     } else if (req.method === "GET" && req.url.startsWith("/api/rooms/")) {
 
@@ -197,7 +197,7 @@ const server = http.createServer((req, res) => {
                         error: "Erreur du serveur"
                     }));
 
-                // Si aucune chambre ne correspond à l'identifiant
+                    // Si aucune chambre ne correspond à l'identifiant
                 } else if (results.length === 0) {
                     res.statusCode = 404;
 
@@ -214,10 +214,10 @@ const server = http.createServer((req, res) => {
         );
 
 
-    // ======================================================
-    // POST - AJOUTER UN NOUVEL HÔTEL
-    // Adresse : /api/hotels
-    // ======================================================
+        // ======================================================
+        // POST - AJOUTER UN NOUVEL HÔTEL
+        // Adresse : /api/hotels
+        // ======================================================
 
     } else if (req.method === "POST" && req.url === "/api/hotels") {
 
@@ -303,7 +303,7 @@ const server = http.createServer((req, res) => {
                     }
                 );
 
-            // Si JSON.parse() rencontre une erreur
+                // Si JSON.parse() rencontre une erreur
             } catch (err) {
 
                 // Code HTTP 400 = JSON invalide
@@ -318,10 +318,10 @@ const server = http.createServer((req, res) => {
         });
 
 
-    // ======================================================
-    // DELETE - SUPPRIMER UN HÔTEL
-    // Exemple : /api/hotels/2
-    // ======================================================
+        // ======================================================
+        // DELETE - SUPPRIMER UN HÔTEL
+        // Exemple : /api/hotels/2
+        // ======================================================
 
     } else if (req.method === "DELETE" && req.url.startsWith("/api/hotels/")) {
 
@@ -392,10 +392,10 @@ const server = http.createServer((req, res) => {
         );
 
 
-    // ======================================================
-    // PUT - MODIFIER LE NOM D'UN HÔTEL
-    // Exemple : /api/hotels/1
-    // ======================================================
+        // ======================================================
+        // PUT - MODIFIER LE NOM D'UN HÔTEL
+        // Exemple : /api/hotels/1
+        // ======================================================
 
     } else if (req.method === "PUT" && req.url.startsWith("/api/hotels/")) {
 
@@ -503,7 +503,7 @@ const server = http.createServer((req, res) => {
                     }
                 );
 
-            // Si le texte reçu n'est pas un JSON valide
+                // Si le texte reçu n'est pas un JSON valide
             } catch (err) {
 
                 // Code HTTP 400 = requête incorrecte
@@ -517,10 +517,248 @@ const server = http.createServer((req, res) => {
             }
         });
 
+        // ================= POST : AJOUTER UNE CHAMBRE =================
 
-    // ======================================================
-    // ROUTE PAR DÉFAUT
-    // ======================================================
+    } else if (req.method === "POST" && req.url === "/api/rooms") {
+
+        // Récupérer les données envoyées
+        let body = "";
+
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+
+        req.on("end", () => {
+
+            try {
+                // Transformer le JSON en objet JavaScript
+                const room = JSON.parse(body);
+
+                // Vérifier les informations obligatoires
+                if (!room || !room.name || !room.price || !room.capacity || !room.hotel_id) {
+
+                    res.writeHead(400, {
+                        "Content-Type": "application/json"
+                    });
+
+                    return res.end(JSON.stringify({
+                        error: "Informations obligatoires manquantes"
+                    }));
+                }
+
+                // Enregistrer la chambre dans MySQL
+                db.query(
+                    "INSERT INTO rooms (hotel_id, name, capacity, price) VALUES (?, ?, ?, ?)",
+                    [
+                        room.hotel_id,
+                        room.name,
+                        room.capacity,
+                        room.price
+                    ],
+
+                    (err, result) => {
+
+                        // Si MySQL rencontre une erreur
+                        if (err) {
+                            res.writeHead(500, {
+                                "Content-Type": "application/json"
+                            });
+
+                            return res.end(JSON.stringify({
+                                error: "Erreur lors de l'ajout de la chambre"
+                            }));
+                        }
+
+                        // Si la chambre est ajoutée avec succès
+                        res.statusCode = 201;
+
+                        res.end(JSON.stringify({
+                            message: "Chambre ajoutée avec succès",
+                            id: result.insertId
+                        }));
+                    }
+                );
+
+            } catch (err) {
+
+                // Si le JSON envoyé est invalide
+                res.writeHead(400, {
+                    "Content-Type": "application/json"
+                });
+
+                return res.end(JSON.stringify({
+                    error: "JSON invalide"
+                }));
+            }
+        });
+
+        // ================= DELETE : SUPPRIMER UNE CHAMBRE =================
+
+    } else if (req.method === "DELETE" && req.url.startsWith("/api/rooms/")) {
+
+        // Récupérer l'identifiant de la chambre
+        const parties = req.url.split("/");
+        const roomId = Number(parties[3]);
+
+        // Vérifier que l'identifiant est valide
+        if (!Number.isInteger(roomId) || roomId <= 0) {
+
+            res.writeHead(400, {
+                "Content-Type": "application/json"
+            });
+
+            return res.end(JSON.stringify({
+                error: "Identifiant invalide"
+            }));
+        }
+
+        db.query(
+            "DELETE FROM rooms WHERE id = ?",
+            [roomId],
+            (err, result) => {
+
+                if (err) {
+                    res.writeHead(500, {
+                        "Content-Type": "application/json"
+                    });
+
+                    return res.end(JSON.stringify({
+                        error: "Erreur lors de la suppression de la chambre"
+                    }));
+                }
+
+                // Ici, nous allons vérifier si la chambre existe.
+                if (result.affectedRows === 0) {
+
+                    res.writeHead(404, {
+                        "Content-Type": "application/json"
+                    });
+
+                    return res.end(JSON.stringify({
+                        error: "Chambre introuvable"
+                    }));
+                }
+
+                // Suppression réalisée 
+                res.statusCode = 200;
+
+                res.end(JSON.stringify({
+                    message: "Chambre supprimée avec succès"
+                }));
+            }
+        );
+
+
+        // ========== MODIFIER LE PRIX D'UNE CHAMBRE ==========
+
+    } else if (req.method === "PUT" && req.url.startsWith("/api/rooms/")) {
+
+        // Récupérer l'identifiant de la chambre dans l'URL
+        const parties = req.url.split("/");
+        const roomId = Number(parties[3]);
+
+        // Vérifier que l'identifiant est valide
+        if (!Number.isInteger(roomId) || roomId <= 0) {
+
+            res.writeHead(400, {
+                "Content-Type": "application/json"
+            });
+
+            return res.end(JSON.stringify({
+                error: "Identifiant invalide"
+            }));
+        }
+
+        // Récupérer les données envoyées par Postman
+        let body = "";
+
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+
+        // Attendre la réception de toutes les données
+        req.on("end", () => {
+
+            try {
+
+                // Transformer le JSON en objet JavaScript
+                const room = JSON.parse(body);
+
+                // Vérifier que le prix est un nombre positif
+                if (
+                    typeof room.price !== "number" ||
+                    !Number.isFinite(room.price) ||
+                    room.price <= 0
+                ) {
+
+                    res.writeHead(400, {
+                        "Content-Type": "application/json"
+                    });
+
+                    return res.end(JSON.stringify({
+                        error: "Prix invalide"
+                    }));
+                }
+
+                // Modifier le prix de la chambre dans MySQL
+                db.query(
+                    "UPDATE rooms SET price = ? WHERE id = ?",
+                    [room.price, roomId],
+                    (err, result) => {
+
+                        // Vérifier si MySQL rencontre une erreur
+                        if (err) {
+
+                            res.writeHead(500, {
+                                "Content-Type": "application/json"
+                            });
+
+                            return res.end(JSON.stringify({
+                                error: "Erreur lors de la modification de la chambre"
+                            }));
+                        }
+
+                        // Vérifier si la chambre existe
+                        if (result.affectedRows === 0) {
+
+                            res.writeHead(404, {
+                                "Content-Type": "application/json"
+                            });
+
+                            return res.end(JSON.stringify({
+                                error: "Chambre introuvable"
+                            }));
+                        }
+
+                        // Confirmer la modification du prix
+                        res.writeHead(200, {
+                            "Content-Type": "application/json"
+                        });
+
+                        res.end(JSON.stringify({
+                            message: "Prix de la chambre modifié avec succès"
+                        }));
+
+                    }
+                );
+
+            } catch (err) {
+
+                // Gérer un JSON incorrect
+                res.writeHead(400, {
+                    "Content-Type": "application/json"
+                });
+
+                return res.end(JSON.stringify({
+                    error: "JSON invalide"
+                }));
+            }
+
+        });
+
+        // ======================================================
+        // ROUTE PAR DÉFAUT
+        // ======================================================
 
     } else {
 
