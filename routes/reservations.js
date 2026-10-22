@@ -6,6 +6,22 @@
 // Importer la connexion MySQL
 const db = require("../db");
 
+// Importer les fonctions
+const { calculerNombreNuits,
+    calculerPrixTotal,
+    verifierFormatDate,
+    verifierDatesReelles,
+    verifierOrdreDates,
+    verifierDisponibilite,
+    creerReservation,
+    verifierClient,
+    recupererPrixChambre,
+    recupererReservations,
+    recupererReservationParId,
+    recupererStatutReservation,
+    modifierStatutReservation,
+    supprimerReservation } = require("../services/reservationsService");
+
 // Fonction qui gère les routes des réservations
 function reservationsRoutes(req, res) {
 
@@ -15,7 +31,7 @@ function reservationsRoutes(req, res) {
 
         res.setHeader("Content-Type", "application/json; charset=utf-8");
 
-        db.query("SELECT * FROM reservations", (err, results) => {
+        recupererReservations((err, results) => {
 
             if (err) {
                 res.statusCode = 500;
@@ -48,9 +64,9 @@ function reservationsRoutes(req, res) {
             return true;
         }
 
-        db.query(
-            "SELECT * FROM reservations WHERE id = ?",
-            [reservationId],
+        recupererReservationParId(
+            reservationId,
+
             (err, results) => {
 
                 if (err) {
@@ -128,13 +144,9 @@ function reservationsRoutes(req, res) {
                 }
 
                 // Vérifier le format des dates : AAAA-MM-JJ
-                const formatDate = /^\d{4}-\d{2}-\d{2}$/;
-
                 if (
-                    typeof reservation.check_in !== "string" ||
-                    typeof reservation.check_out !== "string" ||
-                    !formatDate.test(reservation.check_in) ||
-                    !formatDate.test(reservation.check_out)
+                    !verifierFormatDate(reservation.check_in) ||
+                    !verifierFormatDate(reservation.check_out)
                 ) {
                     res.statusCode = 400;
 
@@ -147,12 +159,8 @@ function reservationsRoutes(req, res) {
                 const dateArrivee = new Date(reservation.check_in);
                 const dateDepart = new Date(reservation.check_out);
 
-                // Vérifier que les dates sont valides
-                if (
-                    !Number.isFinite(dateArrivee.getTime()) || // getTime() transforme une date en un nombre & Number.isFinite() vérifie que ce nombre est valide
-                    !Number.isFinite(dateDepart.getTime()) ||
-                    dateDepart <= dateArrivee // Vérifie que la date de départ n'est pas antérieure ou égale à la date d'arrivée
-                ) {
+                // Vérifier que les dates sont valides et dans le bon ordre
+                if (!verifierOrdreDates(dateArrivee, dateDepart)) {
 
                     res.statusCode = 400;
 
@@ -164,8 +172,12 @@ function reservationsRoutes(req, res) {
 
                 // Vérifier que les dates existent réellement
                 if (
-                    dateArrivee.toISOString().slice(0, 10) !== reservation.check_in || // .toISOString() transforme une date en texte au format ISO, par exemple 2026-11-15T00:00:00.000Z
-                    dateDepart.toISOString().slice(0, 10) !== reservation.check_out // .slice(0, 10) conserve uniquement les dix premiers caractères : 2026-11-15
+                    !verifierDatesReelles(
+                        dateArrivee,
+                        dateDepart,
+                        reservation.check_in,
+                        reservation.check_out
+                    )
                 ) {
                     res.statusCode = 400;
 
@@ -175,14 +187,14 @@ function reservationsRoutes(req, res) {
                 }
 
                 // Calculer le nombre de nuits
-                const nombreNuits = (dateDepart - dateArrivee) / (1000 * 60 * 60 * 24); // calcule la différence entre les deux dates en millisecondes
+                const nombreNuits = calculerNombreNuits(dateArrivee, dateDepart); // calcule la différence entre les deux dates en millisecondes
 
                 console.log("Nombre de nuits :", nombreNuits);
 
                 // Récupérer le prix de la chambre dans MySQL
-                db.query(
-                    "SELECT price FROM rooms WHERE id = ?",
-                    [reservation.room_id],
+                recupererPrixChambre(
+                    reservation.room_id,
+
                     (err, results) => {
 
                         // Vérifier si MySQL rencontre une erreur
@@ -216,14 +228,14 @@ function reservationsRoutes(req, res) {
                         }
 
                         // Calculer le prix total du séjour
-                        const prixTotal = nombreNuits * prixChambre;
+                        const prixTotal = calculerPrixTotal(nombreNuits, prixChambre);
 
                         console.log("Prix total :", prixTotal);
 
                         // Vérifier si le client existe dans MySQL
-                        db.query(
-                            "SELECT id FROM users WHERE id = ?",
-                            [reservation.user_id],
+                        verifierClient(
+                            reservation.user_id,
+
                             (err, results) => {
 
                                 // Vérifier si MySQL rencontre une erreur
@@ -245,18 +257,10 @@ function reservationsRoutes(req, res) {
                                 }
 
                                 // Vérifier si la chambre est déjà réservée
-                                db.query(
-                                    `SELECT id FROM reservations
-                                WHERE room_id = ?
-                                AND status IN ('pending', 'confirmed')
-                                AND check_in < ?
-                                AND check_out > ?`,
-
-                                    [
-                                        reservation.room_id,
-                                        reservation.check_out,
-                                        reservation.check_in
-                                    ],
+                                verifierDisponibilite(
+                                    reservation.room_id,
+                                    reservation.check_in,
+                                    reservation.check_out,
 
                                     (err, results) => {
 
@@ -279,19 +283,9 @@ function reservationsRoutes(req, res) {
                                         }
 
                                         // Enregistrer la réservation dans MySQL
-                                        db.query(
-                                            `INSERT INTO reservations
-                                        (user_id, room_id, check_in, check_out, total_price, status)
-                                        VALUES (?, ?, ?, ?, ?, ?)`,
-
-                                            [
-                                                reservation.user_id,
-                                                reservation.room_id,
-                                                reservation.check_in,
-                                                reservation.check_out,
-                                                prixTotal,
-                                                "pending"
-                                            ],
+                                        creerReservation(
+                                            reservation,
+                                            prixTotal,
 
                                             (err, result) => {
 
@@ -391,9 +385,9 @@ function reservationsRoutes(req, res) {
                 }
 
                 // Vérifier si la réservation existe dans MySQL
-                db.query(
-                    "SELECT id, status FROM reservations WHERE id = ?",
-                    [reservationId],
+                recupererStatutReservation(
+                    reservationId,
+
                     (err, results) => {
 
                         // Vérifier si MySQL rencontre une erreur
@@ -427,9 +421,10 @@ function reservationsRoutes(req, res) {
                         }
 
                         // Modifier le statut de la réservation
-                        db.query(
-                            "UPDATE reservations SET status = ? WHERE id = ?",
-                            [reservation.status, reservationId],
+                        modifierStatutReservation(
+                            reservationId,
+                            reservation.status,
+
                             (err, result) => {
 
                                 // Vérifier si MySQL rencontre une erreur
@@ -490,9 +485,9 @@ function reservationsRoutes(req, res) {
         }
 
         // Supprimer la réservation dans MySQL
-        db.query(
-            "DELETE FROM reservations WHERE id = ?",
-            [reservationId],
+        supprimerReservation(
+            reservationId,
+
             (err, result) => {
 
                 // Vérifier si MySQL rencontre une erreur
