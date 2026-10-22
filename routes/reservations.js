@@ -343,6 +343,190 @@ function reservationsRoutes(req, res) {
         return true;
     }
 
+    // ========== PUT : MODIFIER UNE RÉSERVATION ==========
+
+    if (req.method === "PUT" && req.url.startsWith("/api/reservations/")) {
+
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+        // Récupérer l'identifiant de la réservation
+        const parties = req.url.split("/");
+        const reservationId = Number(parties[3]);
+
+        // Vérifier que l'identifiant est valide
+        if (!Number.isInteger(reservationId) || reservationId <= 0) {
+            res.statusCode = 400;
+
+            return res.end(JSON.stringify({
+                error: "Identifiant invalide"
+            }));
+        }
+
+        // Récupérer les données envoyées par le client
+        let body = "";
+
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+
+        req.on("end", () => {
+
+            try {
+                // Transformer le JSON reçu en objet JavaScript
+                const reservation = JSON.parse(body);
+
+                // Afficher les données dans le terminal
+                console.log(reservation);
+
+                // Vérifier que le statut est autorisé
+                if (
+                    !reservation ||
+                    !["pending", "confirmed", "cancelled"].includes(reservation.status) // includes : vérifie si la valeur de reservation.status se trouve dans notre tableau
+                ) {
+                    res.statusCode = 400;
+
+                    return res.end(JSON.stringify({
+                        error: "Statut de réservation invalide"
+                    }));
+                }
+
+                // Vérifier si la réservation existe dans MySQL
+                db.query(
+                    "SELECT id, status FROM reservations WHERE id = ?",
+                    [reservationId],
+                    (err, results) => {
+
+                        // Vérifier si MySQL rencontre une erreur
+                        if (err) {
+                            res.statusCode = 500;
+
+                            return res.end(JSON.stringify({
+                                error: "Erreur lors de la recherche de la réservation"
+                            }));
+                        }
+
+                        // Vérifier si la réservation existe
+                        if (results.length === 0) {
+                            res.statusCode = 404;
+
+                            return res.end(JSON.stringify({
+                                error: "Réservation introuvable"
+                            }));
+                        }
+
+                        // Empêcher la réactivation d'une réservation annulée
+                        if (
+                            results[0].status === "cancelled" &&
+                            reservation.status !== "cancelled"
+                        ) {
+                            res.statusCode = 409;
+
+                            return res.end(JSON.stringify({
+                                error: "Impossible de réactiver une réservation annulée"
+                            }));
+                        }
+
+                        // Modifier le statut de la réservation
+                        db.query(
+                            "UPDATE reservations SET status = ? WHERE id = ?",
+                            [reservation.status, reservationId],
+                            (err, result) => {
+
+                                // Vérifier si MySQL rencontre une erreur
+                                if (err) {
+                                    res.statusCode = 500;
+
+                                    return res.end(JSON.stringify({
+                                        error: "Erreur lors de la modification de la réservation"
+                                    }));
+                                }
+
+                                // Confirmer la modification
+                                res.statusCode = 200;
+
+                                res.end(JSON.stringify({
+                                    message: "Statut de la réservation modifié avec succès",
+                                    id: reservationId,
+                                    status: reservation.status
+                                }));
+
+                            }
+                        );
+                    }
+                );
+
+            } catch (err) {
+
+                // Si le JSON est invalide
+                res.statusCode = 400;
+
+                return res.end(JSON.stringify({
+                    error: "JSON invalide"
+                }));
+            }
+
+        });
+
+        return true;
+    }
+
+    // ========== DELETE : SUPPRIMER UNE RÉSERVATION ==========
+
+    if (req.method === "DELETE" && req.url.startsWith("/api/reservations/")) {
+
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+        // Récupérer l'identifiant de la réservation
+        const parties = req.url.split("/");
+        const reservationId = Number(parties[3]);
+
+        // Vérifier que l'identifiant est valide
+        if (!Number.isInteger(reservationId) || reservationId <= 0) {
+            res.statusCode = 400;
+
+            return res.end(JSON.stringify({
+                error: "Identifiant invalide"
+            }));
+        }
+
+        // Supprimer la réservation dans MySQL
+        db.query(
+            "DELETE FROM reservations WHERE id = ?",
+            [reservationId],
+            (err, result) => {
+
+                // Vérifier si MySQL rencontre une erreur
+                if (err) {
+                    res.statusCode = 500;
+
+                    return res.end(JSON.stringify({
+                        error: "Erreur lors de la suppression de la réservation"
+                    }));
+                }
+
+                // Vérifier si la réservation existait
+                if (result.affectedRows === 0) {
+                    res.statusCode = 404;
+
+                    return res.end(JSON.stringify({
+                        error: "Réservation introuvable"
+                    }));
+                }
+
+                // Confirmer la suppression
+                res.statusCode = 200;
+
+                res.end(JSON.stringify({
+                    message: "Réservation supprimée avec succès",
+                    id: reservationId
+                }));
+
+            }
+        );
+
+        return true;
+    }
+
     // Aucune route correspondante
     return false;
 }
