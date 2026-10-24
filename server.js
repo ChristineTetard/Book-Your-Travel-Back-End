@@ -18,6 +18,9 @@ const roomsRoutes = require("./routes/rooms");
 //Importer les routes des réservations
 const reservationsRoutes = require("./routes/reservations");
 
+// Importer les routes des utilisateurs
+const usersRoutes = require("./routes/users");
+
 
 // ================= CRÉATION DU SERVEUR =================
 
@@ -37,6 +40,9 @@ const server = http.createServer((req, res) => {
     if (reservationsRoutes(req, res)) {
         return;
     }
+
+    // Gérer les routes des utilisateurs
+    if (usersRoutes(req, res)) return;
 
     // ================= ROUTE PAR DÉFAUT =================
 
