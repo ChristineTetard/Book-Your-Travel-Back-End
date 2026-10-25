@@ -4,6 +4,9 @@
 // Node.js + MySQL
 // ======================================================
 
+// Charger les variables d'environnement
+require("dotenv").config();
+
 // ================= IMPORTATION DES MODULES =================
 
 // Module HTTP pour créer le serveur

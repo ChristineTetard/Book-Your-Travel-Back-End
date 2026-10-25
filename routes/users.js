@@ -12,9 +12,23 @@ const {
     creerUtilisateur,
     rechercherUtilisateurParEmail,
     verifierMotDePasse,
+    genererToken,
+    genererTokenReinitialisation,
+    hacherTokenReinitialisation,
+    enregistrerTokenReinitialisation,
+    rechercherUtilisateurParToken,
+    reinitialiserMotDePasse,
     modifierUtilisateur,
     supprimerUtilisateur
 } = require("../services/usersService");
+
+// ======================================================
+// IMPORTATION DU MIDDLEWARE D'AUTHENTIFICATION
+// ======================================================
+
+// Importer la fonction qui vérifie les tokens JWT
+// pour protéger certaines routes de notre API
+const verifierToken = require("../middlewares/auth");
 
 
 // Fonction qui gère les différentes routes des utilisateurs
@@ -29,6 +43,39 @@ function usersRoutes(req, res) {
 
         // Indiquer que la réponse sera au format JSON
         res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+        // ======================================================
+        // VÉRIFIER L'AUTHENTIFICATION DE L'UTILISATEUR
+        // ======================================================
+
+        // Vérifier que l'utilisateur possède un token JWT valide
+        if (!verifierToken(req, res)) {
+
+            // Arrêter la route si le token est absent ou invalide
+            return true;
+        }
+
+        // ======================================================
+        // VÉRIFIER LE RÔLE ADMINISTRATEUR
+        // ======================================================
+
+        // Vérifier que l'utilisateur possède le rôle admin
+        if (req.utilisateur.role !== "admin") {
+
+            // Indiquer que la réponse sera au format JSON
+            res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+            // Code 403 : l'utilisateur n'a pas les autorisations
+            res.statusCode = 403;
+
+            // Envoyer un message d'erreur
+            res.end(JSON.stringify({
+                error: "Accès réservé aux administrateurs"
+            }));
+
+            // Arrêter la route
+            return true;
+        }
 
         // Récupérer la liste des utilisateurs depuis MySQL
         recupererUtilisateurs((err, results) => {
@@ -54,7 +101,18 @@ function usersRoutes(req, res) {
     // GET : RÉCUPÉRER UN UTILISATEUR PAR SON ID
     // ======================================================
 
-    if (req.method === "GET" && req.url.startsWith("/api/users/")) {
+    if (req.method === "GET" && /^\/api\/users\/\d+$/.test(req.url)) {
+
+        // ======================================================
+        // VÉRIFIER L'AUTHENTIFICATION DE L'UTILISATEUR
+        // ======================================================
+
+        // Vérifier que l'utilisateur possède un token JWT valide
+        if (!verifierToken(req, res)) {
+
+            // Arrêter la route si le token est absent ou invalide
+            return true;
+        }
 
         // Récupérer l'identifiant de l'utilisateur dans l'URL
         // Exemple : /api/users/3
@@ -70,6 +128,29 @@ function usersRoutes(req, res) {
             res.end(JSON.stringify({
                 error: "Identifiant invalide"
             }));
+            return true;
+        }
+
+        // ======================================================
+        // VÉRIFIER LES AUTORISATIONS DE L'UTILISATEUR
+        // ======================================================
+
+        // Vérifier si l'utilisateur demande son propre profil
+        // ou s'il possède le rôle administrateur
+        if (req.utilisateur.id !== userId && req.utilisateur.role !== "admin") {
+
+            // Indiquer que la réponse sera au format JSON
+            res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+            // Code 403 : l'utilisateur n'a pas les autorisations
+            res.statusCode = 403;
+
+            // Envoyer un message d'erreur
+            res.end(JSON.stringify({
+                error: "Accès interdit à ce profil"
+            }));
+
+            // Arrêter la route
             return true;
         }
 
@@ -388,13 +469,17 @@ function usersRoutes(req, res) {
 
 
                             // Le mot de passe est correct
+                            // Générer un token JWT pour l'utilisateur connecté
+                            const token = genererToken(utilisateurTrouve);
+
                             // Code 200 : la connexion a été vérifiée
                             res.statusCode = 200;
 
-                            // Envoyer les informations de l'utilisateur
+                            // Envoyer le token et les informations de l'utilisateur
                             // sans jamais renvoyer son mot de passe
                             return res.end(JSON.stringify({
                                 message: "Connexion réussie",
+                                token: token,
                                 utilisateur: {
                                     id: utilisateurTrouve.id,
                                     first_name: utilisateurTrouve.first_name,
@@ -420,6 +505,333 @@ function usersRoutes(req, res) {
     }
 
     // ======================================================
+    // POST : DEMANDER UNE RÉINITIALISATION DE MOT DE PASSE
+    // ======================================================
+
+    // Vérifier si la requête correspond à la route
+    // de récupération de mot de passe
+    if (req.method === "POST" && req.url === "/api/forgot-password") {
+
+        // Indiquer que la réponse sera au format JSON
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+        // Variable qui va contenir les données envoyées
+        let body = "";
+
+        // Récupérer les données reçues morceau par morceau
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+
+        // Attendre que toutes les données soient reçues
+        req.on("end", () => {
+
+            // Variable qui contiendra les données reçues
+            let donnees;
+
+            // Transformer le texte JSON en objet JavaScript
+            try {
+                donnees = JSON.parse(body);
+
+            } catch (err) {
+
+                // Renvoyer une erreur si le JSON est incorrect
+                res.statusCode = 400;
+
+                return res.end(JSON.stringify({
+                    error: "JSON invalide"
+                }));
+            }
+
+            // Vérifier qu'une adresse e-mail a été envoyée
+            if (
+                !donnees ||
+                typeof donnees.email !== "string" ||
+                !donnees.email.trim()
+            ) {
+
+                res.statusCode = 400;
+
+                return res.end(JSON.stringify({
+                    error: "Adresse e-mail obligatoire"
+                }));
+            }
+
+            // ======================================================
+            // RECHERCHER L'UTILISATEUR DANS MYSQL
+            // ======================================================
+
+            // Rechercher l'utilisateur grâce à son adresse e-mail
+            rechercherUtilisateurParEmail(donnees.email.trim(), (err, results) => {
+
+                // Gérer une éventuelle erreur MySQL
+                if (err) {
+
+                    res.statusCode = 500;
+
+                    return res.end(JSON.stringify({
+                        error: "Erreur du serveur"
+                    }));
+                }
+
+                // Si aucun utilisateur ne correspond à cette adresse
+                if (results.length === 0) {
+
+                    // Renvoyer une réponse générale pour ne pas révéler
+                    // si une adresse e-mail existe dans notre base de données
+                    res.statusCode = 200;
+
+                    return res.end(JSON.stringify({
+                        message: "Si cette adresse existe, une procédure de réinitialisation sera envoyée"
+                    }));
+                }
+
+                // ======================================================
+                // GÉNÉRER LE TOKEN DE RÉINITIALISATION
+                // ======================================================
+
+                // L'utilisateur a été trouvé dans MySQL
+                // Générer un token temporaire et sécurisé
+                const token = genererTokenReinitialisation();
+
+                // Hacher le token avant de l'enregistrer dans MySQL
+                const tokenHash = hacherTokenReinitialisation(token);
+
+                // Récupérer l'utilisateur trouvé dans MySQL
+                const utilisateurTrouve = results[0];
+
+                // Récupérer son identifiant
+                const userId = utilisateurTrouve.id;
+
+                // ======================================================
+                // DÉFINIR LA DATE D'EXPIRATION DU TOKEN
+                // ======================================================
+
+                // Récupérer la date et l'heure actuelles
+                const dateExpiration = new Date();
+
+                // Ajouter 15 minutes à la date actuelle
+                dateExpiration.setMinutes(dateExpiration.getMinutes() + 15);
+
+                // ======================================================
+                // ENREGISTRER LE TOKEN DANS MYSQL
+                // ======================================================
+
+                // Enregistrer le token haché et sa date d'expiration
+                // pour l'utilisateur concerné
+                enregistrerTokenReinitialisation(
+                    userId,
+                    tokenHash,
+                    dateExpiration,
+                    (err, result) => {
+
+                        // Gérer une éventuelle erreur MySQL
+                        if (err) {
+
+                            res.statusCode = 500;
+
+                            return res.end(JSON.stringify({
+                                error: "Erreur du serveur"
+                            }));
+                        }
+
+                        // Le token a été enregistré dans MySQL
+                        // Pour le moment, aucun e-mail n'est envoyé
+
+                        res.statusCode = 200;
+
+                        return res.end(JSON.stringify({
+                            message: "Si cette adresse existe, une procédure de réinitialisation sera envoyée"
+                        }));
+                    }
+                );
+            });
+        });
+
+        // Indiquer que cette route a été traitée
+        return true;
+    }
+
+    // ======================================================
+    // POST : RÉINITIALISER LE MOT DE PASSE
+    // ======================================================
+
+    // Vérifier si la requête correspond à la route
+    // de réinitialisation du mot de passe
+    if (req.method === "POST" && req.url === "/api/reset-password") {
+
+        // Indiquer que la réponse sera au format JSON
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+        // Variable qui va contenir les données envoyées
+        let body = "";
+
+        // Récupérer les données reçues morceau par morceau
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+
+        // Attendre que toutes les données soient reçues
+        req.on("end", () => {
+
+            // Variable qui contiendra le token et le nouveau mot de passe
+            let donnees;
+
+            // Transformer le texte JSON en objet JavaScript
+            try {
+                donnees = JSON.parse(body);
+
+            } catch (err) {
+
+                // Renvoyer une erreur si le JSON est incorrect
+                res.statusCode = 400;
+
+                return res.end(JSON.stringify({
+                    error: "JSON invalide"
+                }));
+            }
+
+            // Vérifier que le token et le nouveau mot de passe sont présents
+            if (
+                !donnees ||
+                typeof donnees.token !== "string" ||
+                typeof donnees.password !== "string" ||
+                !donnees.token.trim() ||
+                !donnees.password.trim()
+            ) {
+
+                res.statusCode = 400;
+
+                return res.end(JSON.stringify({
+                    error: "Token et nouveau mot de passe obligatoires"
+                }));
+            }
+
+            // ======================================================
+            // HACHER LE TOKEN DE RÉINITIALISATION
+            // ======================================================
+
+            // Récupérer le token envoyé par l'utilisateur
+            const token = donnees.token.trim();
+
+            // Hacher le token pour pouvoir le comparer
+            // avec celui enregistré dans MySQL
+            const tokenHash = hacherTokenReinitialisation(token);
+
+            // ======================================================
+            // RECHERCHER LE TOKEN DANS MYSQL
+            // ======================================================
+
+            // Rechercher l'utilisateur associé au token haché
+            // et vérifier que le token n'a pas expiré
+            rechercherUtilisateurParToken(tokenHash, (err, utilisateur) => {
+
+                // Gérer une éventuelle erreur MySQL
+                if (err) {
+
+                    res.statusCode = 500;
+
+                    return res.end(JSON.stringify({
+                        error: "Erreur du serveur"
+                    }));
+                }
+
+                // Vérifier si le token existe et s'il est encore valide
+                if (!utilisateur) {
+
+                    res.statusCode = 400;
+
+                    return res.end(JSON.stringify({
+                        error: "Token invalide ou expiré"
+                    }));
+                }
+
+                // ======================================================
+                // VÉRIFIER LE NOUVEAU MOT DE PASSE
+                // ======================================================
+
+                // Vérifier que le nouveau mot de passe contient
+                // au moins 8 caractères
+                if (donnees.password.length < 8) {
+
+                    res.statusCode = 400;
+
+                    return res.end(JSON.stringify({
+                        error: "Le nouveau mot de passe doit contenir au moins 8 caractères"
+                    }));
+                }
+
+                // ======================================================
+                // HACHER LE NOUVEAU MOT DE PASSE
+                // ======================================================
+
+                // Hacher le nouveau mot de passe avant de l'enregistrer
+                // dans la base de données MySQL
+                hacherMotDePasse(donnees.password)
+
+                    // then() récupère le mot de passe haché
+                    // lorsque l'opération est terminée
+                    .then((nouveauMotDePasseHash) => {
+
+                        // ======================================================
+                        // ENREGISTRER LE NOUVEAU MOT DE PASSE DANS MYSQL
+                        // ======================================================
+
+                        // Modifier le mot de passe de l'utilisateur
+                        // et supprimer le token de réinitialisation utilisé
+                        reinitialiserMotDePasse(
+                            utilisateur.id,
+                            tokenHash,
+                            nouveauMotDePasseHash,
+                            (err, result) => {
+
+                                // Gérer une éventuelle erreur MySQL
+                                if (err) {
+
+                                    res.statusCode = 500;
+
+                                    return res.end(JSON.stringify({
+                                        error: "Erreur du serveur"
+                                    }));
+                                }
+
+                                // Vérifier que le mot de passe a bien été modifié
+                                if (result.affectedRows === 0) {
+
+                                    res.statusCode = 400;
+
+                                    return res.end(JSON.stringify({
+                                        error: "Token invalide ou expiré"
+                                    }));
+                                }
+
+                                // Confirmer la réinitialisation du mot de passe
+                                res.statusCode = 200;
+
+                                return res.end(JSON.stringify({
+                                    message: "Mot de passe réinitialisé avec succès"
+                                }));
+                            }
+                        );
+                    })
+
+                    // Gérer une éventuelle erreur pendant le hachage
+                    .catch((err) => {
+
+                        res.statusCode = 500;
+
+                        return res.end(JSON.stringify({
+                            error: "Erreur lors du hachage du mot de passe"
+                        }));
+                    });
+            });
+        });
+
+        // Indiquer que cette route a été traitée
+        return true;
+    }
+
+    // ======================================================
     // PUT : MODIFIER LE PROFIL D'UN UTILISATEUR
     // ======================================================
 
@@ -429,6 +841,17 @@ function usersRoutes(req, res) {
     // enregistrer dans MySQL.
 
     if (req.method === "PUT" && /^\/api\/users\/\d+$/.test(req.url)) {
+
+        // ======================================================
+        // VÉRIFIER L'AUTHENTIFICATION DE L'UTILISATEUR
+        // ======================================================
+
+        // Vérifier que l'utilisateur possède un token JWT valide
+        if (!verifierToken(req, res)) {
+
+            // Arrêter la route si le token est absent ou invalide
+            return true;
+        }
 
         // Récupérer l'identifiant de l'utilisateur dans l'URL
         // Exemple : /api/users/3
@@ -444,6 +867,29 @@ function usersRoutes(req, res) {
             res.end(JSON.stringify({
                 error: "Identifiant invalide"
             }));
+            return true;
+        }
+
+        // ======================================================
+        // VÉRIFIER LES AUTORISATIONS DE L'UTILISATEUR
+        // ======================================================
+
+        // Vérifier si l'utilisateur modifie son propre profil
+        // ou s'il possède le rôle administrateur
+        if (req.utilisateur.id !== userId && req.utilisateur.role !== "admin") {
+
+            // Indiquer que la réponse sera au format JSON
+            res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+            // Code 403 : l'utilisateur n'a pas les autorisations
+            res.statusCode = 403;
+
+            // Envoyer un message d'erreur
+            res.end(JSON.stringify({
+                error: "Modification interdite pour ce profil"
+            }));
+
+            // Arrêter la route
             return true;
         }
 
@@ -610,12 +1056,45 @@ function usersRoutes(req, res) {
     // DELETE : SUPPRIMER UN UTILISATEUR
     // ======================================================
 
-    // Cette route permet de supprimer un utilisateur
-    // de la base de données grâce à son identifiant.
-    // Elle vérifie que l'identifiant est valide
-    // et que l'utilisateur existe avant de confirmer la suppression.
+    // Cette route permet à un administrateur de supprimer
+    // un utilisateur de la base de données grâce à son identifiant.
+    // Elle vérifie le token JWT, le rôle administrateur,
+    // la validité de l'identifiant et le résultat de la suppression.
 
     if (req.method === "DELETE" && /^\/api\/users\/\d+$/.test(req.url)) {
+
+        // ======================================================
+        // VÉRIFIER L'AUTHENTIFICATION DE L'UTILISATEUR
+        // ======================================================
+
+        // Vérifier que l'utilisateur possède un token JWT valide
+        if (!verifierToken(req, res)) {
+
+            // Arrêter la route si le token est absent ou invalide
+            return true;
+        }
+
+        // ======================================================
+        // VÉRIFIER LES AUTORISATIONS DE L'UTILISATEUR
+        // ======================================================
+
+        // Vérifier que l'utilisateur possède le rôle administrateur
+        if (req.utilisateur.role !== "admin") {
+
+            // Indiquer que la réponse sera au format JSON
+            res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+            // Code 403 : accès interdit
+            res.statusCode = 403;
+
+            // Envoyer un message d'erreur
+            res.end(JSON.stringify({
+                error: "Suppression réservée aux administrateurs"
+            }));
+
+            // Arrêter la route
+            return true;
+        }
 
         // Récupérer l'identifiant dans l'URL
         const parties = req.url.split("/");
