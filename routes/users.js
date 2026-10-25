@@ -11,7 +11,9 @@ const {
     hacherMotDePasse,
     creerUtilisateur,
     rechercherUtilisateurParEmail,
-    verifierMotDePasse
+    verifierMotDePasse,
+    modifierUtilisateur,
+    supprimerUtilisateur
 } = require("../services/usersService");
 
 
@@ -412,6 +414,254 @@ function usersRoutes(req, res) {
                         });
                 }
             );
+        });
+
+        return true;
+    }
+
+    // ======================================================
+    // PUT : MODIFIER LE PROFIL D'UN UTILISATEUR
+    // ======================================================
+
+    // Cette route permet de modifier le prénom, le nom
+    // et l'adresse e-mail d'un utilisateur existant.
+    // Elle vérifie les données reçues avant de les
+    // enregistrer dans MySQL.
+
+    if (req.method === "PUT" && /^\/api\/users\/\d+$/.test(req.url)) {
+
+        // Récupérer l'identifiant de l'utilisateur dans l'URL
+        // Exemple : /api/users/3
+        const parties = req.url.split("/");
+        const userId = Number(parties[3]);
+
+        // Indiquer que la réponse sera au format JSON
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+        // Vérifier que l'identifiant est un entier positif
+        if (!Number.isSafeInteger(userId) || userId <= 0) {
+            res.statusCode = 400;
+            res.end(JSON.stringify({
+                error: "Identifiant invalide"
+            }));
+            return true;
+        }
+
+        // Variable qui va contenir les données envoyées
+        let body = "";
+
+        // Récupérer les données reçues morceau par morceau
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+
+        // Attendre que toutes les données soient reçues
+        req.on("end", () => {
+
+            let utilisateur;
+
+            // Transformer le JSON reçu en objet JavaScript
+            try {
+                utilisateur = JSON.parse(body);
+
+            } catch (err) {
+                res.statusCode = 400;
+
+                return res.end(JSON.stringify({
+                    error: "JSON invalide"
+                }));
+            }
+
+            // Vérifier que les données reçues sont bien un objet
+            if (
+                !utilisateur ||
+                typeof utilisateur !== "object" ||
+                Array.isArray(utilisateur)
+            ) {
+                res.statusCode = 400;
+
+                return res.end(JSON.stringify({
+                    error: "Données invalides"
+                }));
+            }
+
+            // Vérifier que tous les champs obligatoires sont présents
+            if (
+                !utilisateur.first_name ||
+                !utilisateur.last_name ||
+                !utilisateur.email
+            ) {
+                res.statusCode = 400;
+
+                return res.end(JSON.stringify({
+                    error: "Tous les champs sont obligatoires"
+                }));
+            }
+
+            // Vérifier que les champs contiennent bien du texte
+            if (
+                typeof utilisateur.first_name !== "string" ||
+                typeof utilisateur.last_name !== "string" ||
+                typeof utilisateur.email !== "string"
+            ) {
+                res.statusCode = 400;
+
+                return res.end(JSON.stringify({
+                    error: "Les champs doivent contenir du texte"
+                }));
+            }
+
+            // Supprimer les espaces inutiles
+            utilisateur.first_name = utilisateur.first_name.trim();
+            utilisateur.last_name = utilisateur.last_name.trim();
+            utilisateur.email = utilisateur.email.trim();
+
+            // Vérifier que les champs ne sont pas vides
+            if (
+                !utilisateur.first_name ||
+                !utilisateur.last_name ||
+                !utilisateur.email
+            ) {
+                res.statusCode = 400;
+
+                return res.end(JSON.stringify({
+                    error: "Les champs ne peuvent pas être vides"
+                }));
+            }
+
+            // Vérifier le format de l'adresse e-mail
+            const formatEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!formatEmail.test(utilisateur.email)) {
+                res.statusCode = 400;
+
+                return res.end(JSON.stringify({
+                    error: "Adresse e-mail invalide"
+                }));
+            }
+
+            // Vérifier si l'adresse e-mail est déjà utilisée
+            rechercherUtilisateurParEmail(utilisateur.email, (err, results) => {
+
+                // Gérer une éventuelle erreur MySQL
+                if (err) {
+                    res.statusCode = 500;
+
+                    return res.end(JSON.stringify({
+                        error: "Erreur lors de la vérification de l'e-mail"
+                    }));
+                }
+
+                // Vérifier si l'e-mail appartient à un autre utilisateur
+                if (results.length > 0 && results[0].id !== userId) {
+                    res.statusCode = 409;
+
+                    return res.end(JSON.stringify({
+                        error: "Cette adresse e-mail est déjà utilisée"
+                    }));
+                }
+
+                // Modifier les informations de l'utilisateur dans MySQL
+                modifierUtilisateur(userId, utilisateur, (err, result) => {
+
+                    // Gérer une éventuelle erreur MySQL
+                    if (err) {
+
+                        // L'adresse e-mail peut aussi être refusée
+                        // par la contrainte UNIQUE de MySQL
+                        if (err.code === "ER_DUP_ENTRY") {
+                            res.statusCode = 409;
+
+                            return res.end(JSON.stringify({
+                                error: "Cette adresse e-mail est déjà utilisée"
+                            }));
+                        }
+
+                        res.statusCode = 500;
+
+                        return res.end(JSON.stringify({
+                            error: "Erreur lors de la modification de l'utilisateur"
+                        }));
+                    }
+
+                    // Vérifier si l'utilisateur existe dans MySQL
+                    if (result.affectedRows === 0) {
+                        res.statusCode = 404;
+
+                        return res.end(JSON.stringify({
+                            error: "Utilisateur introuvable"
+                        }));
+                    }
+
+                    // La modification a réussi
+                    res.statusCode = 200;
+
+                    return res.end(JSON.stringify({
+                        message: "Utilisateur modifié avec succès"
+                    }));
+                });
+            });
+        });
+
+        return true;
+    }
+
+    // ======================================================
+    // DELETE : SUPPRIMER UN UTILISATEUR
+    // ======================================================
+
+    // Cette route permet de supprimer un utilisateur
+    // de la base de données grâce à son identifiant.
+    // Elle vérifie que l'identifiant est valide
+    // et que l'utilisateur existe avant de confirmer la suppression.
+
+    if (req.method === "DELETE" && /^\/api\/users\/\d+$/.test(req.url)) {
+
+        // Récupérer l'identifiant dans l'URL
+        const parties = req.url.split("/");
+        const userId = Number(parties[3]);
+
+        // Indiquer que la réponse sera au format JSON
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+        // Vérifier que l'identifiant est valide
+        if (!Number.isSafeInteger(userId) || userId <= 0) {
+            res.statusCode = 400;
+
+            res.end(JSON.stringify({
+                error: "Identifiant invalide"
+            }));
+
+            return true;
+        }
+
+        // Supprimer l'utilisateur dans MySQL
+        supprimerUtilisateur(userId, (err, result) => {
+
+            // Gérer une éventuelle erreur MySQL
+            if (err) {
+                res.statusCode = 500;
+
+                return res.end(JSON.stringify({
+                    error: "Erreur lors de la suppression de l'utilisateur"
+                }));
+            }
+
+            // Vérifier si l'utilisateur existait
+            if (result.affectedRows === 0) {
+                res.statusCode = 404;
+
+                return res.end(JSON.stringify({
+                    error: "Utilisateur introuvable"
+                }));
+            }
+
+            // Confirmer la suppression
+            res.statusCode = 200;
+
+            return res.end(JSON.stringify({
+                message: "Utilisateur supprimé avec succès"
+            }));
         });
 
         return true;

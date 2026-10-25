@@ -148,6 +148,62 @@ async function verifierMotDePasse(password, passwordHash) {
 }
 
 
+ // ======================================================
+ // PUT : MODIFIER LE PROFIL D'UN UTILISATEUR
+ // ======================================================
+
+ // Modifier le prénom, le nom et l'adresse e-mail
+ // d'un utilisateur existant dans MySQL
+ function modifierUtilisateur(userId, utilisateur, callback) {
+
+     // Préparer la requête SQL pour modifier l'utilisateur
+     // WHERE permet de cibler uniquement l'identifiant demandé
+     const sql = `
+         UPDATE users
+         SET first_name = ?, last_name = ?, email = ?
+         WHERE id = ?
+     `;
+
+     // Préparer les valeurs qui remplaceront les points
+     // d'interrogation dans la requête SQL
+     const valeurs = [
+         utilisateur.first_name,
+         utilisateur.last_name,
+         utilisateur.email,
+         userId
+     ];
+
+     // Exécuter la requête SQL avec les valeurs fournies
+     db.query(sql, valeurs, (err, result) => {
+
+         // Transmettre le résultat ou une erreur à la route
+         callback(err, result);
+     });
+ }
+
+
+
+ // ======================================================
+ // DELETE : SUPPRIMER UN UTILISATEUR
+ // ======================================================
+
+ // Supprimer un utilisateur de MySQL grâce à son identifiant
+ function supprimerUtilisateur(userId, callback) {
+
+     // Préparer la requête SQL de suppression
+     // WHERE permet de supprimer uniquement l'utilisateur demandé
+     const sql = "DELETE FROM users WHERE id = ?";
+
+     // Exécuter la requête SQL avec l'identifiant fourni
+     db.query(sql, [userId], (err, result) => {
+
+         // Transmettre le résultat ou une erreur à la route
+         callback(err, result);
+     });
+ }
+
+
+
 // ======================================================
 // EXPORT DES FONCTIONS
 // ======================================================
@@ -160,5 +216,7 @@ module.exports = {
     hacherMotDePasse,
     creerUtilisateur,
     rechercherUtilisateurParEmail,
-    verifierMotDePasse
+    verifierMotDePasse,
+    modifierUtilisateur,
+    supprimerUtilisateur
 };
