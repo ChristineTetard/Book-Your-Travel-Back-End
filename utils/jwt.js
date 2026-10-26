@@ -295,6 +295,16 @@ function verifierExpirationToken(donnees) {
         return false;
     }
 
+    // ======================================================
+    // VÉRIFIER LA COHÉRENCE DES DATES
+    // ======================================================
+
+    // La date d'expiration doit obligatoirement
+    // être postérieure à la date de création du token
+    if (donnees.exp <= donnees.iat) {
+        return false;
+    }
+
     // Vérifier que le token ne dépasse pas
     // notre durée de validité maximale de 2 heures
     if (donnees.exp - donnees.iat > 2 * 60 * 60) {
