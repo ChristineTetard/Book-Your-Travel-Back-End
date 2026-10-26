@@ -10,8 +10,13 @@
 // Importer la connexion à la base de données MySQL
 const db = require("../db");
 
-// Importer jsonwebtoken pour créer et vérifier les tokens JWT
-const jwt = require("jsonwebtoken");
+// ======================================================
+// IMPORTATION DE NOTRE SYSTÈME JWT NATIF
+// ======================================================
+
+// Importer notre fonction de création des tokens JWT
+// depuis le fichier utils/jwt.js
+const { genererToken: genererTokenJWT } = require("../utils/jwt");
 
 // Importer le module crypto natif de Node.js
 // pour sécuriser les mots de passe avec scrypt
@@ -213,28 +218,19 @@ async function verifierMotDePasse(password, passwordHash) {
 }
 
 // ======================================================
-// AUTHENTIFICATION : GÉNÉRER UN TOKEN JWT
+// GÉNÉRER UN TOKEN JWT APRÈS LA CONNEXION
 // ======================================================
 
-// Créer un token JWT après une connexion réussie
+// Créer un token JWT pour un utilisateur connecté
 function genererToken(utilisateur) {
 
-    // Préparer les informations à inclure dans le token
-    const donnees = {
-        id: utilisateur.id,
-        role: utilisateur.role
-    };
+    // Utiliser notre fonction JWT native
+    // importée depuis utils/jwt.js
+    const token = genererTokenJWT(utilisateur);
 
-    // Signer le token avec la clé secrète du fichier .env
-    // Le token expirera automatiquement après 2 heures
-    const token = jwt.sign(donnees, process.env.JWT_SECRET, {
-        expiresIn: "2h"
-    });
-
-    // Retourner le token généré
+    // Retourner le token créé
     return token;
 }
-
 // ======================================================
 // RÉCUPÉRATION DE MOT DE PASSE : GÉNÉRER UN TOKEN
 // ======================================================

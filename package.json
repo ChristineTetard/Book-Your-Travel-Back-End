@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/ChristineTetard/Book-Your-Travel-Back-End#readme",
   "dependencies": {
-    "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.24.6"
   }
 }

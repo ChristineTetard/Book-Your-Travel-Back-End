@@ -6,13 +6,13 @@
 // envoyés par les utilisateurs pour accéder
 // aux routes protégées de notre API.
 
-
 // ======================================================
-// IMPORTATION DU MODULE JWT
+// IMPORTATION DE NOTRE SYSTÈME JWT NATIF
 // ======================================================
 
-// Importer jsonwebtoken pour vérifier les tokens JWT
-const jwt = require("jsonwebtoken");
+// Importer notre fonction de vérification des tokens JWT
+// depuis le fichier utils/jwt.js
+const { verifierTokenJWT } = require("../utils/jwt");
 
 // ======================================================
 // AUTHENTIFICATION : VÉRIFIER LE TOKEN JWT
@@ -73,8 +73,9 @@ function verifierToken(req, res) {
 
     try {
 
-        // Vérifier la signature et la date d'expiration du token
-        const donnees = jwt.verify(token, process.env.JWT_SECRET);
+        // Vérifier le token avec notre fonction JWT native
+        // qui utilise le module crypto de Node.js
+        const donnees = verifierTokenJWT(token);
 
         // Conserver les informations de l'utilisateur authentifié
         req.utilisateur = donnees;
