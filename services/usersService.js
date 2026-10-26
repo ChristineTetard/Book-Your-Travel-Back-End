@@ -3,20 +3,19 @@
 // ======================================================
 
 // Ce fichier contient les fonctions qui communiquent
-// avec MySQL et qui gèrent les mots de passe avec bcrypt.
+// avec MySQL et qui sécurisent les mots de passe
+// avec scrypt, un algorithme disponible dans Node.js.
 
 
 // Importer la connexion à la base de données MySQL
 const db = require("../db");
 
-// Importer bcrypt pour hacher et vérifier les mots de passe
-const bcrypt = require("bcrypt");
-
 // Importer jsonwebtoken pour créer et vérifier les tokens JWT
 const jwt = require("jsonwebtoken");
 
-// Importer le module crypto de Node.js
-// pour générer des tokens temporaires sécurisés
+// Importer le module crypto natif de Node.js
+// pour sécuriser les mots de passe avec scrypt
+// et générer des tokens temporaires sécurisés
 const crypto = require("crypto");
 
 
@@ -66,16 +65,35 @@ function recupererUtilisateurParId(userId, callback) {
 // SÉCURISATION : HACHER UN MOT DE PASSE
 // ======================================================
 
-// Transformer un mot de passe en une valeur hachée
+// Transformer la fonction scrypt de Node.js
+// en une fonction utilisable avec async et await
+const { promisify } = require("node:util");
+
+// Préparer une version de scrypt qui retourne une Promise
+const scryptAsync = promisify(crypto.scrypt);
+
+// Transformer un mot de passe en une valeur sécurisée
 // avant son enregistrement dans MySQL
 async function hacherMotDePasse(password) {
 
-    // bcrypt.hash() permet de hacher le mot de passe
-    // Le nombre 12 correspond au facteur de coût du hachage
-    // await attend que l'opération soit terminée
-    const passwordHash = await bcrypt.hash(password, 12);
+    // Générer un sel aléatoire de 16 octets
+    // Le sel permet d'obtenir des résultats différents
+    // même lorsque deux utilisateurs ont le même mot de passe
+    const salt = crypto.randomBytes(16).toString("hex");
 
-    // Retourner le mot de passe haché
+    // Hacher le mot de passe avec scrypt
+    // 64 correspond à la longueur du résultat en octets
+    // await attend que le calcul soit terminé
+    const hash = await scryptAsync(password, salt, 64);
+
+    // Convertir le résultat en texte hexadécimal
+    const hashHex = hash.toString("hex");
+
+    // Conserver le sel avec le hash pour permettre
+    // la vérification du mot de passe lors de la connexion
+    const passwordHash = `scrypt:${salt}:${hashHex}`;
+
+    // Retourner la valeur à enregistrer dans MySQL
     return passwordHash;
 }
 
@@ -97,7 +115,8 @@ function creerUtilisateur(utilisateur, passwordHash, callback) {
 
         // Informations à enregistrer dans MySQL
         // Le rôle "client" est attribué automatiquement
-        // Le mot de passe a déjà été haché avec bcrypt
+        // Le mot de passe a déjà été haché avec scrypt
+        // avant son enregistrement dans MySQL
         [
             utilisateur.first_name,
             utilisateur.last_name,
@@ -144,9 +163,49 @@ function rechercherUtilisateurParEmail(email, callback) {
 // avec le mot de passe haché enregistré dans MySQL
 async function verifierMotDePasse(password, passwordHash) {
 
-    // bcrypt.compare() vérifie si les mots de passe correspondent
-    // await attend le résultat de la comparaison
-    const correspond = await bcrypt.compare(password, passwordHash);
+    // Vérifier que le hash enregistré est bien une chaîne
+    // au format attendu pour notre algorithme scrypt
+    if (typeof passwordHash !== "string") {
+        return false;
+    }
+
+    // Séparer les trois parties du hash enregistré
+    const parties = passwordHash.split(":");
+
+    // Vérifier que le format contient bien trois parties
+    // et que l'algorithme utilisé est scrypt
+    if (
+        parties.length !== 3 ||
+        parties[0] !== "scrypt"
+    ) {
+        return false;
+    }
+
+    // Récupérer le sel et le hash enregistrés
+    const salt = parties[1];
+    const hashHex = parties[2];
+
+    // Vérifier le format et la longueur des valeurs
+    if (
+        !/^[0-9a-f]{32}$/.test(salt) ||
+        !/^[0-9a-f]{128}$/.test(hashHex)
+    ) {
+        return false;
+    }
+
+    // Recalculer le hash avec le mot de passe saisi
+    // et le sel récupéré dans MySQL
+    const hashCalcule = await scryptAsync(password, salt, 64);
+
+    // Transformer le hash enregistré en Buffer
+    // pour pouvoir comparer les deux résultats
+    const hashEnregistre = Buffer.from(hashHex, "hex");
+
+    // Comparer les deux hashes de manière sécurisée
+    const correspond = crypto.timingSafeEqual(
+        hashCalcule,
+        hashEnregistre
+    );
 
     // Retourner true si le mot de passe est correct
     // ou false s'il est incorrect

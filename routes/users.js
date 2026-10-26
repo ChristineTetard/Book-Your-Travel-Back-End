@@ -4,7 +4,7 @@
 
 // Importer les fonctions du service des utilisateurs
 // Ces fonctions permettent de communiquer avec MySQL
-// et de gérer les mots de passe avec bcrypt
+// et de sécuriser les mots de passe avec scrypt
 const {
     recupererUtilisateurs,
     recupererUtilisateurParId,
