@@ -1,9 +1,6 @@
 
 // ================= CONNEXION À MYSQL =================
 
-// Charger les variables du fichier .env
-require("dotenv").config();
-
 // Importer mysql2
 const mysql = require("mysql2");
 

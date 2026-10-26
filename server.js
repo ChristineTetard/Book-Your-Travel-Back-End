@@ -4,8 +4,14 @@
 // Node.js + MySQL
 // ======================================================
 
-// Charger les variables d'environnement
-require("dotenv").config();
+// ======================================================
+// CHARGEMENT DES VARIABLES D'ENVIRONNEMENT
+// ======================================================
+
+// Charger les variables du fichier .env
+// avec une fonctionnalité native de Node.js
+// sans utiliser de bibliothèque externe
+process.loadEnvFile();
 
 // ================= IMPORTATION DES MODULES =================
 
