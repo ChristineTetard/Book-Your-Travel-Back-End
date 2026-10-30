@@ -7,6 +7,9 @@
 // Importer la connexion MySQL
 const db = require("../db");
 
+// Importer le middleware d'authentification JWT
+const verifierToken = require("../middlewares/auth");
+
 // Fonction qui gère les routes des chambres
 function roomsRoutes(req, res) {
 
@@ -76,74 +79,133 @@ function roomsRoutes(req, res) {
     }
 
 
-    // ========== POST : AJOUTER UNE CHAMBRE ==========
 
-    if (req.method === "POST" && req.url === "/api/rooms") {
+// ========== POST : AJOUTER UNE CHAMBRE ==========
 
-        res.setHeader("Content-Type", "application/json; charset=utf-8");
+if (req.method === "POST" && req.url === "/api/rooms") {
 
-        let body = "";
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
 
-        req.on("data", (chunk) => {
-            body += chunk;
-        });
-
-        req.on("end", () => {
-
-            let room;
-
-            try {
-                room = JSON.parse(body);
-            } catch (err) {
-                res.statusCode = 400;
-                return res.end(JSON.stringify({
-                    error: "JSON invalide"
-                }));
-            }
-
-            // Vérifier les informations obligatoires
-            if (
-                !room ||
-                !room.name ||
-                !room.price ||
-                !room.capacity ||
-                !room.hotel_id
-            ) {
-                res.statusCode = 400;
-                return res.end(JSON.stringify({
-                    error: "Informations obligatoires manquantes"
-                }));
-            }
-
-            db.query(
-                "INSERT INTO rooms (hotel_id, name, capacity, price) VALUES (?, ?, ?, ?)",
-                [
-                    room.hotel_id,
-                    room.name,
-                    room.capacity,
-                    room.price
-                ],
-                (err, result) => {
-
-                    if (err) {
-                        res.statusCode = 500;
-                        return res.end(JSON.stringify({
-                            error: "Erreur lors de l'ajout de la chambre"
-                        }));
-                    }
-
-                    res.statusCode = 201;
-
-                    res.end(JSON.stringify({
-                        message: "Chambre ajoutée avec succès",
-                        id: result.insertId
-                    }));
-                }
-            );
-        });
-
+    // Vérifier que l'utilisateur est connecté
+    if (!verifierToken(req, res)) {
         return true;
     }
+
+    // Autoriser uniquement les administrateurs et les prestataires
+    if (
+        req.utilisateur.role !== "admin" &&
+        req.utilisateur.role !== "prestataire"
+    ) {
+        res.statusCode = 403;
+        return res.end(JSON.stringify({
+            error: "Accès réservé aux administrateurs et prestataires"
+        }));
+    }
+
+    let body = "";
+
+    req.on("data", (chunk) => {
+        body += chunk;
+    });
+
+    req.on("end", () => {
+
+        let room;
+
+        try {
+            room = JSON.parse(body);
+        } catch (err) {
+            res.statusCode = 400;
+            return res.end(JSON.stringify({
+                error: "JSON invalide"
+            }));
+        }
+
+        // Vérifier les informations obligatoires
+        if (
+            !room ||
+            typeof room !== "object" ||
+            Array.isArray(room) ||
+            typeof room.name !== "string" ||
+            !room.name.trim() ||
+            typeof room.price !== "number" ||
+            !Number.isFinite(room.price) ||
+            room.price <= 0 ||
+            !Number.isInteger(room.capacity) ||
+            room.capacity <= 0 ||
+            !Number.isInteger(room.hotel_id) ||
+            room.hotel_id <= 0
+        ) {
+            res.statusCode = 400;
+            return res.end(JSON.stringify({
+                error: "Informations de la chambre invalides ou manquantes"
+            }));
+        }
+
+        // Vérifier que le prestataire possède l'hôtel
+        db.query(
+            "SELECT provider_id FROM hotels WHERE id = ?",
+            [room.hotel_id],
+            (err, results) => {
+
+                if (err) {
+                    res.statusCode = 500;
+                    return res.end(JSON.stringify({
+                        error: "Erreur du serveur"
+                    }));
+                }
+
+                if (results.length === 0) {
+                    res.statusCode = 404;
+                    return res.end(JSON.stringify({
+                        error: "Hôtel introuvable"
+                    }));
+                }
+
+                // Vérifier les droits du prestataire
+                if (
+                    req.utilisateur.role !== "admin" &&
+                    Number(results[0].provider_id) !== Number(req.utilisateur.id)
+                ) {
+                    res.statusCode = 403;
+                    return res.end(JSON.stringify({
+                        error: "Vous ne pouvez pas ajouter de chambre à cet hôtel"
+                    }));
+                }
+
+                // Ajouter la chambre uniquement après autorisation
+                db.query(
+                    "INSERT INTO rooms (hotel_id, name, capacity, price) VALUES (?, ?, ?, ?)",
+                    [
+                        room.hotel_id,
+                        room.name,
+                        room.capacity,
+                        room.price
+                    ],
+                    (err, result) => {
+
+                        if (err) {
+                            res.statusCode = 500;
+                            return res.end(JSON.stringify({
+                                error: "Erreur lors de l'ajout de la chambre"
+                            }));
+                        }
+
+                        res.statusCode = 201;
+
+                        res.end(JSON.stringify({
+                            message: "Chambre ajoutée avec succès",
+                            id: result.insertId
+                        }));
+                    }
+                );
+            }
+        );
+    });
+
+    return true;
+}
+
 
 
     // ========== DELETE : SUPPRIMER UNE CHAMBRE ==========
@@ -155,6 +217,23 @@ function roomsRoutes(req, res) {
 
         res.setHeader("Content-Type", "application/json; charset=utf-8");
 
+        // Vérifier que l'utilisateur est connecté
+        if (!verifierToken(req, res)) {
+            return true;
+        }
+
+        // Autoriser uniquement les administrateurs et les prestataires
+        if (
+            req.utilisateur.role !== "admin" &&
+            req.utilisateur.role !== "prestataire"
+        ) {
+            res.statusCode = 403;
+
+            return res.end(JSON.stringify({
+                error: "Accès réservé aux administrateurs et prestataires"
+            }));
+        }
+
         if (!Number.isInteger(roomId) || roomId <= 0) {
             res.statusCode = 400;
             res.end(JSON.stringify({
@@ -163,9 +242,16 @@ function roomsRoutes(req, res) {
             return true;
         }
 
+        // Supprimer uniquement une chambre appartenant
+        // à un hôtel du prestataire connecté
         db.query(
-            "DELETE FROM rooms WHERE id = ?",
-            [roomId],
+            `DELETE rooms FROM rooms INNER JOIN hotels ON rooms.hotel_id = hotels.id
+                WHERE rooms.id = ? AND (hotels.provider_id = ? OR ? = 'admin')`,
+            [
+                roomId,
+                req.utilisateur.id,
+                req.utilisateur.role
+            ],
             (err, result) => {
 
                 if (err) {
@@ -202,6 +288,23 @@ function roomsRoutes(req, res) {
         const roomId = Number(parties[3]);
 
         res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+        // Vérifier que l'utilisateur est connecté
+        if (!verifierToken(req, res)) {
+            return true;
+        }
+
+        // Autoriser uniquement les administrateurs et les prestataires
+        if (
+            req.utilisateur.role !== "admin" &&
+            req.utilisateur.role !== "prestataire"
+        ) {
+            res.statusCode = 403;
+
+            return res.end(JSON.stringify({
+                error: "Accès réservé aux administrateurs et prestataires"
+            }));
+        }
 
         if (!Number.isInteger(roomId) || roomId <= 0) {
             res.statusCode = 400;
@@ -243,9 +346,17 @@ function roomsRoutes(req, res) {
                 }));
             }
 
+            // Modifier le prix uniquement si l'utilisateur est
+            // administrateur ou propriétaire de l'hôtel
             db.query(
-                "UPDATE rooms SET price = ? WHERE id = ?",
-                [room.price, roomId],
+                `UPDATE rooms INNER JOIN hotels ON rooms.hotel_id = hotels.id SET rooms.price = ?
+                    WHERE rooms.id = ? AND (hotels.provider_id = ? OR ? = 'admin')`,
+                [
+                    room.price,
+                    roomId,
+                    req.utilisateur.id,
+                    req.utilisateur.role
+                ],
                 (err, result) => {
 
                     if (err) {

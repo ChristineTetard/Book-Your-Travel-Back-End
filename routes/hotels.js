@@ -7,6 +7,9 @@
 // Importer la connexion MySQL
 const db = require("../db");
 
+// Importer le middleware d'authentification JWT
+const verifierToken = require("../middlewares/auth");
+
 // Fonction qui gère les routes des hôtels
 function hotelsRoutes(req, res) {
 
@@ -83,6 +86,23 @@ function hotelsRoutes(req, res) {
 
         res.setHeader("Content-Type", "application/json; charset=utf-8");
 
+        // Vérifier que l'utilisateur est connecté
+        if (!verifierToken(req, res)) {
+            return true;
+        }
+
+        // Autoriser uniquement les administrateurs et les prestataires
+        if (
+            req.utilisateur.role !== "admin" &&
+            req.utilisateur.role !== "prestataire"
+        ) {
+            res.statusCode = 403;
+
+            return res.end(JSON.stringify({
+                error: "Accès réservé aux administrateurs et prestataires"
+            }));
+        }
+
         let body = "";
 
         req.on("data", (chunk) => {
@@ -100,6 +120,25 @@ function hotelsRoutes(req, res) {
                 return res.end(JSON.stringify({
                     error: "JSON invalide"
                 }));
+            }
+
+            // ======================================================
+            // ATTRIBUER L'HÔTEL AU PRESTATAIRE CONNECTÉ
+            // ======================================================
+
+            // Vérifier que les données reçues sont bien un objet
+            if (!hotel || typeof hotel !== "object" || Array.isArray(hotel)) {
+                res.statusCode = 400;
+
+                return res.end(JSON.stringify({
+                    error: "Données de l'hôtel invalides"
+                }));
+            }
+
+            // Un prestataire ne peut pas créer un hôtel
+            // au nom d'un autre utilisateur
+            if (req.utilisateur.role === "prestataire") {
+                hotel.provider_id = req.utilisateur.id;
             }
 
             // Vérifier les informations obligatoires
@@ -158,6 +197,23 @@ function hotelsRoutes(req, res) {
 
         res.setHeader("Content-Type", "application/json; charset=utf-8");
 
+        // Vérifier que l'utilisateur est connecté
+        if (!verifierToken(req, res)) {
+            return true;
+        }
+
+        // Autoriser uniquement les administrateurs et les prestataires
+        if (
+            req.utilisateur.role !== "admin" &&
+            req.utilisateur.role !== "prestataire"
+        ) {
+            res.statusCode = 403;
+
+            return res.end(JSON.stringify({
+                error: "Accès réservé aux administrateurs et prestataires"
+            }));
+        }
+
         if (!Number.isInteger(hotelId) || hotelId <= 0) {
             res.statusCode = 400;
             res.end(JSON.stringify({
@@ -166,9 +222,11 @@ function hotelsRoutes(req, res) {
             return true;
         }
 
+        // Supprimer l'hôtel uniquement si l'utilisateur est
+        // administrateur ou propriétaire de cet hôtel
         db.query(
-            "DELETE FROM hotels WHERE id = ?",
-            [hotelId],
+            `DELETE FROM hotels WHERE id = ? AND (provider_id = ? OR ? = 'admin')`,
+            [hotelId, req.utilisateur.id, req.utilisateur.role],
             (err, result) => {
 
                 if (err) {
@@ -205,6 +263,23 @@ function hotelsRoutes(req, res) {
         const hotelId = Number(parties[3]);
 
         res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+        // Vérifier que l'utilisateur est connecté
+        if (!verifierToken(req, res)) {
+            return true;
+        }
+
+        // Autoriser uniquement les administrateurs et les prestataires
+        if (
+            req.utilisateur.role !== "admin" &&
+            req.utilisateur.role !== "prestataire"
+        ) {
+            res.statusCode = 403;
+
+            return res.end(JSON.stringify({
+                error: "Accès réservé aux administrateurs et prestataires"
+            }));
+        }
 
         if (!Number.isInteger(hotelId) || hotelId <= 0) {
             res.statusCode = 400;
@@ -246,8 +321,13 @@ function hotelsRoutes(req, res) {
             }
 
             db.query(
-                "UPDATE hotels SET name = ? WHERE id = ?",
-                [hotel.name, hotelId],
+                `UPDATE hotels SET name = ? WHERE id = ? AND (provider_id = ? OR ? = 'admin')`,
+                [
+                    hotel.name,
+                    hotelId,
+                    req.utilisateur.id,
+                    req.utilisateur.role
+                ],
                 (err, result) => {
 
                     if (err) {
