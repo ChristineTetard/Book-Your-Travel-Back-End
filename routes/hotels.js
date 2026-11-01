@@ -13,13 +13,46 @@ const verifierToken = require("../middlewares/auth");
 // Fonction qui gère les routes des hôtels
 function hotelsRoutes(req, res) {
 
-    // ========== GET : RÉCUPÉRER TOUS LES HÔTELS ==========
+    // ========== GET : RÉCUPÉRER TOUS LES HÔTELS OU FILTRER PAR CATÉGORIE ==========
 
-    if (req.method === "GET" && req.url === "/api/hotels") {
+    if (
+        req.method === "GET" &&
+        (req.url === "/api/hotels" || req.url.startsWith("/api/hotels?"))
+    ) {
 
         res.setHeader("Content-Type", "application/json; charset=utf-8");
 
-        db.query("SELECT * FROM hotels", (err, results) => {
+        // Analyser l'URL pour récupérer les paramètres
+        const url = new URL(req.url, "http://localhost");
+
+        // Récupérer le paramètre category_id
+        const categoryId = url.searchParams.get("category_id");
+
+        // Requête SQL par défaut : récupérer tous les hôtels
+        let sql = "SELECT * FROM hotels";
+        let params = [];
+
+        // Si une catégorie est précisée, filtrer les hôtels
+        if (categoryId !== null) {
+
+            // Vérifier que l'identifiant est valide
+            const id = Number(categoryId);
+
+            if (!Number.isInteger(id) || id <= 0) {
+                res.statusCode = 400;
+                res.end(JSON.stringify({
+                    error: "Identifiant de catégorie invalide"
+                }));
+                return true;
+            }
+
+            // Ajouter le filtre à la requête SQL
+            sql = "SELECT * FROM hotels WHERE category_id = ?";
+            params = [id];
+        }
+
+        // Exécuter la requête SQL
+        db.query(sql, params, (err, results) => {
 
             if (err) {
                 res.statusCode = 500;
@@ -28,6 +61,7 @@ function hotelsRoutes(req, res) {
                 }));
             }
 
+            res.statusCode = 200;
             res.end(JSON.stringify(results));
         });
 
@@ -94,7 +128,7 @@ function hotelsRoutes(req, res) {
         // Autoriser uniquement les administrateurs et les prestataires
         if (
             req.utilisateur.role !== "admin" &&
-            req.utilisateur.role !== "prestataire"
+            req.utilisateur.role !== "provider"
         ) {
             res.statusCode = 403;
 
@@ -137,7 +171,7 @@ function hotelsRoutes(req, res) {
 
             // Un prestataire ne peut pas créer un hôtel
             // au nom d'un autre utilisateur
-            if (req.utilisateur.role === "prestataire") {
+            if (req.utilisateur.role === "provider") {
                 hotel.provider_id = req.utilisateur.id;
             }
 
@@ -156,14 +190,26 @@ function hotelsRoutes(req, res) {
                 }));
             }
 
+            // Vérifier que l'identifiant de catégorie est valide
+            if (
+                !Number.isInteger(hotel.category_id) ||
+                hotel.category_id <= 0
+            ) {
+                res.statusCode = 400;
+                return res.end(JSON.stringify({
+                    error: "Identifiant de catégorie invalide"
+                }));
+            }
+
             db.query(
-                "INSERT INTO hotels (provider_id, name, address, city, country) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO hotels (provider_id, name, address, city, country, category_id) VALUES (?, ?, ?, ?, ?, ?)",
                 [
                     hotel.provider_id,
                     hotel.name,
                     hotel.address,
                     hotel.city,
-                    hotel.country
+                    hotel.country,
+                    hotel.category_id
                 ],
                 (err, result) => {
 
@@ -205,7 +251,7 @@ function hotelsRoutes(req, res) {
         // Autoriser uniquement les administrateurs et les prestataires
         if (
             req.utilisateur.role !== "admin" &&
-            req.utilisateur.role !== "prestataire"
+            req.utilisateur.role !== "provider"
         ) {
             res.statusCode = 403;
 
@@ -272,7 +318,7 @@ function hotelsRoutes(req, res) {
         // Autoriser uniquement les administrateurs et les prestataires
         if (
             req.utilisateur.role !== "admin" &&
-            req.utilisateur.role !== "prestataire"
+            req.utilisateur.role !== "provider"
         ) {
             res.statusCode = 403;
 

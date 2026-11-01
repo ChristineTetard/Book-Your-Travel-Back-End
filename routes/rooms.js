@@ -94,7 +94,7 @@ if (req.method === "POST" && req.url === "/api/rooms") {
     // Autoriser uniquement les administrateurs et les prestataires
     if (
         req.utilisateur.role !== "admin" &&
-        req.utilisateur.role !== "prestataire"
+        req.utilisateur.role !== "provider"
     ) {
         res.statusCode = 403;
         return res.end(JSON.stringify({
@@ -225,7 +225,7 @@ if (req.method === "POST" && req.url === "/api/rooms") {
         // Autoriser uniquement les administrateurs et les prestataires
         if (
             req.utilisateur.role !== "admin" &&
-            req.utilisateur.role !== "prestataire"
+            req.utilisateur.role !== "provider"
         ) {
             res.statusCode = 403;
 
@@ -297,7 +297,7 @@ if (req.method === "POST" && req.url === "/api/rooms") {
         // Autoriser uniquement les administrateurs et les prestataires
         if (
             req.utilisateur.role !== "admin" &&
-            req.utilisateur.role !== "prestataire"
+            req.utilisateur.role !== "provider"
         ) {
             res.statusCode = 403;
 

@@ -30,6 +30,9 @@ const reservationsRoutes = require("./routes/reservations");
 // Importer les routes des utilisateurs
 const usersRoutes = require("./routes/users");
 
+// Importer les routes des categories
+const categoriesRoutes = require("./routes/categories");
+
 
 // ================= CRÉATION DU SERVEUR =================
 
@@ -52,6 +55,9 @@ const server = http.createServer((req, res) => {
 
     // Gérer les routes des utilisateurs
     if (usersRoutes(req, res)) return;
+
+    // Vérifier si la requête concerne les catégories
+    if (categoriesRoutes(req, res)) return;
 
     // ================= ROUTE PAR DÉFAUT =================
 
