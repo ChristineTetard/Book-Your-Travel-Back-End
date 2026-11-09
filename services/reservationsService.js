@@ -6,27 +6,13 @@
 // Importer la connexion à la base de données MySQL
 const db = require("../db");
 
-
-// ======================================================
-// CALCULS DES RÉSERVATIONS
-// ======================================================
-
-// Calculer le nombre de nuits entre l'arrivée et le départ
-function calculerNombreNuits(dateArrivee, dateDepart) {
-
-    // Convertir la différence entre les dates en nombre de jours
-    return (dateDepart - dateArrivee) / (1000 * 60 * 60 * 24);
-
-}
-
-// Calculer le prix total selon le nombre de nuits
-function calculerPrixTotal(nombreNuits, prixChambre) {
-
-    // Multiplier le nombre de nuits par le prix d'une nuit
-    return nombreNuits * prixChambre;
-
-}
-
+// Importer les fonctions de validation et de calcul des réservations
+const {
+    verifierOrdreDates,
+    verifierDatesReelles,
+    calculerNombreNuits,
+    calculerPrixTotal
+} = require("./reservationsValidation");
 
 // ======================================================
 // VÉRIFICATION DES DATES
@@ -42,30 +28,6 @@ function verifierFormatDate(date) {
     return typeof date === "string" && formatDate.test(date);
 
 }
-
-// Vérifier que les dates correspondent à de vrais jours du calendrier
-function verifierDatesReelles(dateArrivee, dateDepart, checkIn, checkOut) {
-
-    // Comparer les dates créées en JavaScript aux dates reçues
-    return (
-        dateArrivee.toISOString().slice(0, 10) === checkIn &&
-        dateDepart.toISOString().slice(0, 10) === checkOut
-    );
-
-}
-
-// Vérifier que les dates sont valides et que le départ est après l'arrivée
-function verifierOrdreDates(dateArrivee, dateDepart) {
-
-    // Vérifier que les dates sont valides et dans le bon ordre
-    return (
-        Number.isFinite(dateArrivee.getTime()) &&
-        Number.isFinite(dateDepart.getTime()) &&
-        dateDepart > dateArrivee
-    );
-
-}
-
 
 // ======================================================
 // DISPONIBILITÉ DES CHAMBRES

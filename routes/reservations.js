@@ -376,9 +376,30 @@ function reservationsRoutes(req, res) {
                             }));
                         }
 
-                        // Calculer le prix total du séjour
-                        const prixTotal = calculerPrixTotal(nombreNuits, prixChambre);
+                        // ======================================================
+                        // CALCULER LE PRIX TOTAL DU SÉJOUR
+                        // ======================================================
 
+                        // Déclarer la variable qui contiendra le prix total
+                        let prixTotal;
+
+                        try {
+
+                            // Calculer le prix total du séjour
+                            prixTotal = calculerPrixTotal(nombreNuits, prixChambre);
+
+                        } catch (error) {
+
+                            // Refuser la réservation si le calcul est impossible
+                            res.statusCode = 400;
+
+                            return res.end(JSON.stringify({
+                                error: "Nombre de nuits ou prix de chambre invalide"
+                            }));
+
+                        }
+
+                        // Afficher le prix total dans le terminal
                         console.log("Prix total :", prixTotal);
 
                         // Vérifier si le client existe dans MySQL
@@ -973,8 +994,8 @@ function reservationsRoutes(req, res) {
                                     }));
                                 }
 
-                                // Récupérer le prix de la chambre
-                                const prixChambre = results[0].price;
+                                // Récupérer le prix de la chambre et le convertir en nombre
+                                const prixChambre = Number(results[0].price);
 
                                 // ======================================================
                                 // CALCULER LE NOUVEAU PRIX TOTAL
@@ -982,10 +1003,26 @@ function reservationsRoutes(req, res) {
 
                                 // Calculer le prix total avec le nouveau nombre de nuits
                                 // et le prix de la chambre
-                                const nouveauPrixTotal = calculerPrixTotal(
-                                    nombreNuits,
-                                    prixChambre
-                                );
+                                let nouveauPrixTotal;
+
+                                try {
+
+                                    // Effectuer le calcul du nouveau prix total
+                                    nouveauPrixTotal = calculerPrixTotal(
+                                        nombreNuits,
+                                        prixChambre
+                                    );
+
+                                } catch (error) {
+
+                                    // Refuser la réservation si le calcul est impossible
+                                    res.statusCode = 400;
+
+                                    return res.end(JSON.stringify({
+                                        error: "Nombre de nuits ou prix de chambre invalide"
+                                    }));
+
+                                }
 
                                 // ======================================================
                                 // ENREGISTRER LES MODIFICATIONS DANS MYSQL
