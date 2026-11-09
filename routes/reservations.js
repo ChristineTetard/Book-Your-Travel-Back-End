@@ -7,6 +7,13 @@
 const db = require("../db");
 
 // ======================================================
+// IMPORTER NOTRE CLASSE RESERVATION (POO)
+// ======================================================
+
+// Importer la classe qui représente une réservation
+const Reservation = require("../models/Reservation");
+
+// ======================================================
 // IMPORTER LE MIDDLEWARE D'AUTHENTIFICATION
 // ======================================================
 
@@ -385,8 +392,15 @@ function reservationsRoutes(req, res) {
 
                         try {
 
-                            // Calculer le prix total du séjour
-                            prixTotal = calculerPrixTotal(nombreNuits, prixChambre);
+                            // Créer un objet Reservation à partir de notre classe
+                            const nouvelleReservation = new Reservation(
+                                reservation.check_in,
+                                reservation.check_out,
+                                prixChambre
+                            );
+
+                            // Calculer le prix total grâce à la méthode de notre objet
+                            prixTotal = nouvelleReservation.calculerTotal();
 
                         } catch (error) {
 
@@ -1007,11 +1021,15 @@ function reservationsRoutes(req, res) {
 
                                 try {
 
-                                    // Effectuer le calcul du nouveau prix total
-                                    nouveauPrixTotal = calculerPrixTotal(
-                                        nombreNuits,
+                                    // Créer un objet Reservation avec les nouvelles dates
+                                    const reservationModifiee = new Reservation(
+                                        reservation.check_in,
+                                        reservation.check_out,
                                         prixChambre
                                     );
+
+                                    // Calculer le nouveau prix total grâce à notre classe POO
+                                    nouveauPrixTotal = reservationModifiee.calculerTotal();
 
                                 } catch (error) {
 
