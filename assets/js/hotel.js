@@ -141,7 +141,7 @@ const roomCard =
 
 // AFFICHER LES CHAMBRES
 
-function afficherRooms() {
+function afficherRooms(rooms) {
 
     if (!roomCard) {
         console.error(
@@ -153,10 +153,17 @@ function afficherRooms() {
     // Nettoyage du conteneur
     roomCard.innerHTML = "";
 
+    // Vérifier si l'hôtel possède des chambres
+    if (rooms.length === 0) {
+        roomCard.innerHTML = "<p>Aucune chambre disponible pour cet hôtel.</p>";
+        return;
+    }
+
+
     // CREATION DE CHAQUE CARTE
 
     // Pourcourir le tableau destinations et créer automatiquement une carte pour chaque destination.
-    cardsRoom.forEach((room) => {
+    rooms.forEach((room) => {
         // Création d'un élément HTML directement en Javascript.
         const colRoom = document.createElement("div");
 
@@ -165,7 +172,7 @@ function afficherRooms() {
 
         // GENERER LES BONHOMMES
 
-        const peopleIcons = "👤".repeat(room.person);
+        const peopleIcons = "👤".repeat(room.capacity);
 
         // HTML DE LA CARTE
 
@@ -174,26 +181,28 @@ function afficherRooms() {
 <article class="room">
 
     
-    <img class="img-room" src="${room.img}" alt="Photo de ${room.name}" width="584" height="533" loading="lazy">
+    <img class="img-room" src="${room.image ? `../images/hotel/${room.image}` : '../images/hotel/interior-modern-comfortable-hotel-room (1).webp'}" 
+        alt="Photo de ${room.name}" 
+        width="584" height="533" 
+        loading="lazy">
     <div class="room-description">
         <h3>${room.name}</h3>
-            <p>Prices are per room 20% VAT Included in price</p>
-            <p>
-                Non-refundableFull
-                English breakfast $ 24.80
-            </p>
-                                    
-            <p class="more-info">+ more info</p>
+
+        <p>${room.description || "Aucune description disponible pour cette chambre."}</p>
     </div>
 
     <div class="room-info">
         <p>Max :
             <span class="people" aria-hidden="true">${peopleIcons}</span>
-            <span class="visually-hidden">${room.person} people</span>
+            <span class="visually-hidden">${room.capacity} people</span>
         </p>
-        <p>Price: $ 55</p>
+        <p>Price: $ ${room.price}</p>
         <p>Rooms: 01</p>
-        <a class="booking" href="/Book-Your-Travel/assets/pages/payment-process-1.html" aria-label="Book ${room.name}">BOOK NOW</a>
+        <a class="booking"
+            href="payment-process-1.html?room_id=${room.id}&hotel_id=${room.hotel_id}&checkin=${encodeURIComponent(checkIn || "")}&checkout=${encodeURIComponent(checkOut || "")}"
+            aria-label="Book ${room.name}">
+        BOOK NOW
+</a>
     </div>
     
     
@@ -208,16 +217,6 @@ function afficherRooms() {
         roomCard.appendChild(colRoom);
     });
 }
-
-// ===== INITIALISATION =====
-
-document.addEventListener(
-    "DOMContentLoaded", // Attend que le HTML soit chargé avant d'exécuter le code.
-    () => {
-
-        afficherRooms();
-    }
-);
 
 // Commentaires 
 
@@ -317,3 +316,161 @@ document.addEventListener(
         afficherCommentaires();
     }
 );
+
+// ========== RÉCUPÉRATION DES PARAMÈTRES DE RECHERCHE ==========
+
+// Récupérer les paramètres présents dans l'URL
+const searchParams = new URLSearchParams(window.location.search);
+
+const hotelId = searchParams.get("id");
+
+// Récupérer les informations saisies dans le formulaire
+const destination = searchParams.get("destination");
+const checkIn = searchParams.get("checkin");
+const checkOut = searchParams.get("checkout");
+
+console.log("Identifiant de l'hôtel sélectionné :", hotelId);
+
+// Afficher les informations pour vérifier leur récupération
+console.log("Destination :", destination);
+console.log("Date d'arrivée :", checkIn);
+console.log("Date de départ :", checkOut);
+
+// ========== RÉCUPÉRATION DES HÔTELS DEPUIS L'API ==========
+
+// Envoyer une requête GET à notre serveur Node.js
+fetch("http://localhost:3000/api/hotels")
+    .then(response => {
+
+        // Vérifier que le serveur a répondu correctement
+        if (!response.ok) {
+            throw new Error("Erreur lors de la récupération des hôtels");
+        }
+
+        // Transformer la réponse JSON en données JavaScript
+        return response.json();
+    })
+    .then(hotels => {
+
+        // Afficher tous les hôtels récupérés depuis MySQL
+        console.log("Hôtels récupérés depuis MySQL :", hotels);
+
+        // Filtrer les hôtels selon la destination recherchée
+        const hotelsFiltres = hotels.filter(hotel => {
+
+            // Si aucune destination n'est saisie, conserver tous les hôtels
+            if (!destination) {
+                return true;
+            }
+
+            // Comparer la ville de l'hôtel à la destination recherchée
+            return hotel.city.toLowerCase() === destination.trim().toLowerCase();
+        });
+
+        // Afficher les hôtels correspondant à la recherche
+        console.log("Hôtels correspondant à la destination :", hotelsFiltres);
+    })
+    .catch(error => {
+
+        // Afficher une éventuelle erreur
+        console.error("Erreur API :", error.message);
+    });
+
+// ========== RÉCUPÉRATION DE L'HÔTEL SÉLECTIONNÉ ==========
+
+if (hotelId) {
+
+    fetch(`http://localhost:3000/api/hotels/${hotelId}`)
+
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error("Impossible de récupérer cet hôtel");
+            }
+
+            return response.json();
+        })
+
+        .then(hotel => {
+
+            console.log("Hôtel sélectionné depuis MySQL :", hotel);
+
+            // ========== AFFICHAGE DU NOM DE L'HÔTEL ==========
+
+            // Récupérer le titre dans le HTML
+            const hotelName = document.getElementById("hotel-name");
+
+            // Remplacer le nom statique par celui provenant de MySQL
+            if (hotelName) {
+                hotelName.textContent = hotel.name;
+            }
+
+            // ========== AFFICHAGE DE LA LOCALISATION ==========
+
+            // Récupérer l'élément HTML
+            const hotelLocation = document.getElementById("hotel-location");
+
+            // Afficher les informations provenant de MySQL
+            if (hotelLocation) {
+                hotelLocation.textContent = [
+                    hotel.address,
+                    hotel.city,
+                    hotel.country
+                ].filter(Boolean).join(", ");
+            }
+
+            // ========== AFFICHAGE DE LA DESCRIPTION ==========
+
+            // Récupérer le paragraphe dans le HTML
+            const hotelDescription = document.getElementById("hotel-description");
+
+            // Afficher la description provenant de MySQL
+            if (hotelDescription) {
+
+                hotelDescription.textContent =
+                    hotel.description || "Aucune description disponible pour cet hôtel.";
+
+            }
+
+        })
+
+        .catch(error => {
+            console.error("Erreur API hôtel :", error.message);
+        });
+
+}
+
+// ========== RÉCUPÉRATION DES CHAMBRES DE L'HÔTEL ==========
+
+if (hotelId) {
+
+    fetch("http://localhost:3000/api/rooms")
+
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error("Impossible de récupérer les chambres");
+            }
+
+            return response.json();
+        })
+
+        .then(rooms => {
+
+            // Filtrer les chambres selon l'hôtel sélectionné
+            const hotelRooms = rooms.filter(room => {
+                return Number(room.hotel_id) === Number(hotelId);
+            });
+
+            console.log("Chambres de l'hôtel sélectionné :", hotelRooms);
+
+            // Afficher les chambres récupérées depuis MySQL
+            afficherRooms(hotelRooms);
+
+        })
+
+        .catch(error => {
+            console.error("Erreur API chambres :", error.message);
+        });
+
+}

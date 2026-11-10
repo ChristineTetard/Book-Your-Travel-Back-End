@@ -164,232 +164,234 @@
         <hr class="separation-2">
     </header>
 
-        <!-- ================= MAIN ================= -->
-        <main>
+    <!-- ================= MAIN ================= -->
+    <main>
 
-            <section class="form-payment">
+        <section class="form-payment">
 
-                <div class="container-form-payment">
+            <div class="container-form-payment">
 
-                    <div class="formulaire-payment">
-                        <h1 class="titre-payment"><span class="color-number">01</span> Traveller info</h1>
-                        <hr class="separation-3">
+                <div class="formulaire-payment">
+                    <h1 class="titre-payment"><span class="color-number">01</span> Traveller info</h1>
+                    <hr class="separation-3">
 
-                        <form class="form-contact-payment-1" action="payment-process-2.html" method="get">
+                    <form class="form-contact-payment-1" action="payment-process-2.html" method="get">
 
-                            <div class="form-field">
-                                <label class="contact" for="first-name">First name</label>
-                                <input type="text" name="first-name" id="first-name">
-                            </div>
+                        <div class="form-field">
+                            <label class="contact" for="first-name">First name</label>
+                            <input type="text" name="first-name" id="first-name">
+                        </div>
 
-                            <div class="form-field">
-                                <label class="contact" for="last-name">Last name</label>
-                                <input type="text" name="last-name" id="last-name">
-                            </div>
+                        <div class="form-field">
+                            <label class="contact" for="last-name">Last name</label>
+                            <input type="text" name="last-name" id="last-name">
+                        </div>
 
-                            <div class="form-field">
-                                <label class="contact" for="email-address">Email address</label>
-                                <input type="email" name="email-address" id="email-address">
-                            </div>
+                        <div class="form-field">
+                            <label class="contact" for="email-address">Email address</label>
+                            <input type="email" name="email-address" id="email-address">
+                        </div>
 
-                            <div class="form-field">
-                                <label class="contact" for="confirm-email-address">
-                                    Confirm email address
-                                </label>
-                                <input type="email" name="confirm-email-address" id="confirm-email-address">
-                            </div>
+                        <div class="form-field">
+                            <label class="contact" for="confirm-email-address">
+                                Confirm email address
+                            </label>
+                            <input type="email" name="confirm-email-address" id="confirm-email-address">
+                        </div>
 
-                            <p><i class="petit-texte">You'll receive a confirmation email</i></p>
+                        <p><i class="petit-texte">You'll receive a confirmation email</i></p>
 
-                            <div class="form-field">
-                                <label class="contact" for="street-adress">
-                                    Street Address and Number
-                                </label>
-                                <input type="text" name="street-adress" id="street-adress">
-                            </div>
+                        <div class="form-field">
+                            <label class="contact" for="street-adress">
+                                Street Address and Number
+                            </label>
+                            <input type="text" name="street-adress" id="street-adress">
+                        </div>
 
-                            <div class="form-field">
-                                <label class="contact" for="city">Town / City</label>
-                                <input type="text" name="city" id="city">
-                            </div>
+                        <div class="form-field">
+                            <label class="contact" for="city">Town / City</label>
+                            <input type="text" name="city" id="city">
+                        </div>
 
-                            <div class="form-field">
-                                <label class="contact" for="zip-code">ZIP Code</label>
-                                <input type="text" name="zip-code" id="zip-code" inputmode="numeric"
-                                    autocomplete="postal-code">
-                            </div>
+                        <div class="form-field">
+                            <label class="contact" for="zip-code">ZIP Code</label>
+                            <input type="text" name="zip-code" id="zip-code" inputmode="numeric"
+                                autocomplete="postal-code">
+                        </div>
 
-                            <div class="form-field">
-                                <label class="contact" for="country">Country</label>
-                                <input type="text" name="country" id="country">
-                            </div>
+                        <div class="form-field">
+                            <label class="contact" for="country">Country</label>
+                            <input type="text" name="country" id="country">
+                        </div>
 
-                            <div class="form-field full-width">
-                                <label class="contact" for="requirements">
-                                    Special requirements: (Not Guaranteed)
-                                </label>
+                        <div class="form-field full-width">
+                            <label class="contact" for="requirements">
+                                Special requirements: (Not Guaranteed)
+                            </label>
 
-                                <textarea name="requirements" id="requirements"></textarea>
+                            <textarea name="requirements" id="requirements"></textarea>
 
-                                <p><i class="petit-texte">Please write your requests in English.</i></p>
-                            </div>
+                            <p><i class="petit-texte">Please write your requests in English.</i></p>
+                        </div>
 
-                            <button class="button-contact" type="submit">
-                                PROCEED TO NEXT STEP
-                            </button>
+                        <button class="button-contact" type="submit">
+                            PROCEED TO NEXT STEP
+                        </button>
 
-                        </form>
-                    </div>
+                    </form>
                 </div>
+            </div>
 
-                <div class="hotel-informations">
+            <div class="hotel-informations">
 
-                    <div class="information-box">
-                        <h2>Best ipsum hotel</h2>
-                        <p>
-                            Marylebone, London
-                            <span class="note">
-                                <span class="visually-hidden">3 stars</span>
-                                <span aria-hidden="true">★★★ 👍</span>
-                            </span>
-                            8/10
-                        </p>
+                <div class="information-box">
+                    <h2 id="payment-hotel-name">Best ipsum hotel</h2>
+                    <p>
+                        <span id="payment-hotel-location">Marylebone, London</span>
+                        <span class="note">
+                            <span class="visually-hidden">3 stars</span>
+                            <span aria-hidden="true">★★★ 👍</span>
+                        </span>
+                        8/10
+                    </p>
 
-                        <hr>
+                    <hr>
 
-                        <dl class="hotel-details">
+                    <dl class="hotel-details">
 
-                            <div class="detail-item">
-                                <dt>Rooms</dt>
-                                <dd>Standard twin room</dd>
-                            </div>
+                        <div class="detail-item">
+                            <dt>Rooms</dt>
+                            <dd id="payment-room-name">Standard twin room</dd>
+                        </div>
 
-                            <div class="detail-item">
-                                <dt>Room Description</dt>
-                                <dd>Room only</dd>
-                            </div>
+                        <div class="detail-item">
+                            <dt>Room Description</dt>
+                            <dd id="payment-room-description">Room only</dd>
+                        </div>
 
-                            <div class="detail-item">
-                                <dt>Check-in Date</dt>
-                                <dd>14-11-12</dd>
-                            </div>
+                        <div class="detail-item">
+                            <dt>Check-in Date</dt>
+                            <dd id="payment-checkin">14-11-12</dd>
+                        </div>
 
-                            <div class="detail-item">
-                                <dt>Check-out Date</dt>
-                                <dd>15-11-12</dd>
-                            </div>
+                        <div class="detail-item">
+                            <dt>Check-out Date</dt>
+                            <dd id="payment-checkout">15-11-12</dd>
+                        </div>
 
-                            <div class="detail-item">
-                                <dt>Room(s)</dt>
-                                <dd>1 night, 1 room, max. 2 people.</dd>
-                            </div>
+                        <div class="detail-item">
+                            <dt>Room(s)</dt>
+                            <dd id="payment-room-details">
+                                1 night, 1 room, max. 2 people.
+                            </dd>
+                        </div>
 
-                        </dl>
+                    </dl>
 
-                        <hr>
+                    <hr>
 
-                        <p class="total-price">
-                            Total Price: $ 55,00
-                        </p>
+                    <p class="total-price">
+                        Total Price: $ <span id="payment-room-price">55.00</span>
+                    </p>
 
-                        <p>VAT (20%) included</p>
-
-                    </div>
-
-                    <!-- Help Contact -->
-
-                    <aside class="information-box">
-                        <h2>Need Help Booking ?</h2>
-
-                        <hr>
-
-                        <p>
-                            Call our customer service team on the number below to speak
-                            to one of our advisors who will help you
-                            with all of your holiday needs.
-                        </p>
-                        <p class="help-phone">
-                            <i class="fa-solid fa-phone phone" aria-hidden="true"></i>
-                            <span class="help-phone-2">1- 555 - 555 - 555</span>
-                        </p>
-                    </aside>
+                    <p>VAT (20%) included</p>
 
                 </div>
 
-            </section>
+                <!-- Help Contact -->
 
-        </main>
+                <aside class="information-box">
+                    <h2>Need Help Booking ?</h2>
 
+                    <hr>
 
-        <!-- ================= PIED DE PAGE ================= -->
-
-        <footer class="footer">
-            <div class="footer-container">
-
-                <div class="footer-column">
-                    <h3>Book Your Travel</h3>
-                    <p>1400 Pennsylvania Ave. Washington, DC</p>
-                    <p><strong>P:</strong> 24/7 customer support: 1-555-555-5555</p>
-                    <p><strong>E:</strong> booking@mail.com</p>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Customer support</h3>
-                    <ul>
-                        <li>Faq</li>
-                        <li>How do I make a reservation?</li>
-                        <li>Payment options</li>
-                        <li>Booking tips</li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Follow us</h3>
-                    <div class="socials">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                        <a href="#" aria-label="Youtube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
-                        <a href="#" aria-label="RSS"><i class="fas fa-rss" aria-hidden="true"></i></a>
-                        <a href="#" aria-label="Google Plus"><i class="fab fa-google-plus-g" aria-hidden="true"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
-                        <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p" aria-hidden="true"></i></a>
-                        <a href="#" aria-label="Vimeo"><i class="fab fa-vimeo-v" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Don't miss our exclusive offers</h3>
-                    <div class="signup-container">
-                        <label for="signup-email" class="visually-hidden">Your email address</label>
-                        <input type="email" id="signup-email" class="signup-input" placeholder="Enter your email here">
-                        <button class="signup-button">SIGNUP</button>
-                    </div>
-                </div>
+                    <p>
+                        Call our customer service team on the number below to speak
+                        to one of our advisors who will help you
+                        with all of your holiday needs.
+                    </p>
+                    <p class="help-phone">
+                        <i class="fa-solid fa-phone phone" aria-hidden="true"></i>
+                        <span class="help-phone-2">1- 555 - 555 - 555</span>
+                    </p>
+                </aside>
 
             </div>
 
-            <div class="footer-bottom"></div>
+        </section>
 
-            <!-- ================= PIED DE PAGE BAS ================= -->
-    
-            <div class="footer-bas">
-                <div class="footer-left-bas">
-                    Copyright 2016 Book your travel ltd. All rights reserved
-                </div>
-                <div class="footer-right-bas">
-                    <a href="#">About us</a>
-                    <a href="#">Contact</a>
-                    <a href="#">Partners</a>
-                    <a href="#">Customer service</a>
-                    <a href="#">FAQ</a>
-                    <a href="#">Careers</a>
-                    <a href="#">Terms & Conditions</a>
-                    <a href="#">Privacy statement</a>
+    </main>
+
+
+    <!-- ================= PIED DE PAGE ================= -->
+
+    <footer class="footer">
+        <div class="footer-container">
+
+            <div class="footer-column">
+                <h3>Book Your Travel</h3>
+                <p>1400 Pennsylvania Ave. Washington, DC</p>
+                <p><strong>P:</strong> 24/7 customer support: 1-555-555-5555</p>
+                <p><strong>E:</strong> booking@mail.com</p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Customer support</h3>
+                <ul>
+                    <li>Faq</li>
+                    <li>How do I make a reservation?</li>
+                    <li>Payment options</li>
+                    <li>Booking tips</li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Follow us</h3>
+                <div class="socials">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Youtube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="RSS"><i class="fas fa-rss" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Google Plus"><i class="fab fa-google-plus-g" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Vimeo"><i class="fab fa-vimeo-v" aria-hidden="true"></i></a>
                 </div>
             </div>
-        </footer>
 
+            <div class="footer-column">
+                <h3>Don't miss our exclusive offers</h3>
+                <div class="signup-container">
+                    <label for="signup-email" class="visually-hidden">Your email address</label>
+                    <input type="email" id="signup-email" class="signup-input" placeholder="Enter your email here">
+                    <button class="signup-button">SIGNUP</button>
+                </div>
+            </div>
 
+        </div>
+
+        <div class="footer-bottom"></div>
+
+        <!-- ================= PIED DE PAGE BAS ================= -->
+
+        <div class="footer-bas">
+            <div class="footer-left-bas">
+                Copyright 2016 Book your travel ltd. All rights reserved
+            </div>
+            <div class="footer-right-bas">
+                <a href="#">About us</a>
+                <a href="#">Contact</a>
+                <a href="#">Partners</a>
+                <a href="#">Customer service</a>
+                <a href="#">FAQ</a>
+                <a href="#">Careers</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy statement</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/payment-process-1.js"></script>
 </body>
 
 </html>

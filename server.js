@@ -38,6 +38,33 @@ const categoriesRoutes = require("./routes/categories");
 
 const server = http.createServer((req, res) => {
 
+        // ================= CONFIGURATION CORS =================
+
+    // Autoriser notre Front-End à communiquer avec l'API
+    res.setHeader(
+        "Access-Control-Allow-Origin",
+        "http://127.0.0.1:5500"
+    );
+
+    // Autoriser les méthodes HTTP utilisées par notre API
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PUT, DELETE, OPTIONS"
+    );
+
+    // Autoriser les en-têtes nécessaires aux requêtes
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Content-Type, Authorization"
+    );
+
+    // Répondre aux requêtes de vérification CORS du navigateur
+    if (req.method === "OPTIONS") {
+        res.statusCode = 204;
+        res.end();
+        return;
+    }
+
     // Vérifier si la requête concerne les hôtels
     if (hotelsRoutes(req, res)) {
         return;
